@@ -6,7 +6,12 @@ import android.os.Bundle;
 
 import com.example.reto2androidclient.R;
 
-public class Home extends AppCompatActivity {
+/**
+ * Controller for the Home window.
+ *
+ * @author Aitor Fidalgo
+ */
+public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
