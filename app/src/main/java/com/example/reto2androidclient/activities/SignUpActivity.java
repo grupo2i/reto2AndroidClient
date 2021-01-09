@@ -17,15 +17,15 @@ import com.example.reto2androidclient.R;
  */
 public class SignUpActivity extends AppCompatActivity {
 
-    private Button buttonCancelSignUp, buttonAcceptSignUp;
+    private Button buttonCancel, buttonAccept;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        buttonCancelSignUp = findViewById(R.id.buttonCancelSignUp);
-        buttonCancelSignUp.setOnClickListener(new View.OnClickListener() {
+        buttonCancel = findViewById(R.id.buttonCancelSignUp);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentToLogIn = new Intent(SignUpActivity.this, LogInActivity.class);
@@ -33,8 +33,8 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        buttonAcceptSignUp = findViewById(R.id.buttonAcceptSignUp);
-        buttonAcceptSignUp.setOnClickListener(new View.OnClickListener() {
+        buttonAccept = findViewById(R.id.buttonAcceptSignUp);
+        buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
