@@ -46,11 +46,11 @@ public class User implements Serializable {
     /**
      * Specifies the last time the User loged in into the system.
      */
-    private Date lastAccess;
+    private String lastAccess;
     /**
      * Specifies the last time the User chaged their password.
      */
-    private Date lastPasswordChange;
+    private String lastPasswordChange;
     /**
      * Name of the profile image of the User.
      */
@@ -130,19 +130,19 @@ public class User implements Serializable {
     }
 
     public Date getLastAccess() {
-        return lastAccess;
+        return new Date(lastAccess);
     }
 
     public void setLastAccess(Date lastAccess) {
-        this.lastAccess = lastAccess;
+        this.lastAccess = lastAccess.toString();
     }
 
     public Date getLastPasswordChange() {
-        return lastPasswordChange;
+        return new Date(lastPasswordChange);
     }
 
     public void setLastPasswordChange(Date lastPasswordChange) {
-        this.lastPasswordChange = lastPasswordChange;
+        this.lastPasswordChange = lastPasswordChange.toString();
     }
 
     public String getProfileImage() {
