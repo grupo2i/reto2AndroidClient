@@ -1,8 +1,10 @@
 package com.example.reto2androidclient.security;
 
-import java.io.File;
+import android.content.Context;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
@@ -15,17 +17,19 @@ import javax.crypto.Cipher;
 public class PublicCrypt {
 
     /**
-     * Cifra un texto con RSA, modo ECB y padding PKCS1Padding (asimetrica) y lo
+     * Cifra un texto con RSA, modo ECB y padding PKCS1Padding (asim�trica) y lo
      * retorna
      *
      * @param mensaje El mensaje a cifrar
      * @return El mensaje cifrado
      */
-    public byte[] encode(String mensaje) {
-        byte[] encodedMessage = null;
+    public static String encode(Context context, String mensaje) {
+        String encodedMessageStr = null;
         try {
-            // Clave publica
-            byte fileKey[] = fileReader(".\\src\\reto2desktopclient\\security\\Public.key");
+            byte[] encodedMessage = null;
+
+            //Reading public key...
+            byte[] fileKey = fileReader(context);
 
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(fileKey);
@@ -34,28 +38,51 @@ public class PublicCrypt {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
             encodedMessage = cipher.doFinal(mensaje.getBytes());
+            //Encoding encoded message to hexadecimal.
+            encodedMessageStr = encodeHexadecimal(encodedMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return encodedMessage;
+        return encodedMessageStr;
     }
 
     /**
      * Retorna el contenido de un fichero
      *
-     * @param path Path del fichero
      * @return El texto del fichero
      */
-    private byte[] fileReader(String path) {
-        byte ret[] = null;
-        File file = new File(path);
+    private static byte[] fileReader(Context context) throws Exception {
+        byte[] ret;
+
         try {
-            ret = Files.readAllBytes(file.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
+            int id = context.getResources().getIdentifier("public_key", "raw", context.getPackageName());
+            InputStream inputStream = context.getResources().openRawResource(id);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            int leidos;
+            byte[] data = new byte[1024];
+            while((leidos = inputStream.read(data, 0, data.length)) != -1) {
+                byteArrayOutputStream.write(data, 0, leidos);
+            }
+            byteArrayOutputStream.flush();
+            ret = byteArrayOutputStream.toByteArray();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new Exception();
         }
+
         return ret;
+    }
+
+    static String encodeHexadecimal(byte[] message) {
+        String hexadecimalString = "";
+        for (int i = 0; i < message.length; i++) {
+            String h = Integer.toHexString(message[i] & 0xFF);
+            if (h.length() == 1)
+                hexadecimalString += "0";
+            hexadecimalString += h;
+        }
+        return hexadecimalString.toUpperCase();
     }
 }
 
