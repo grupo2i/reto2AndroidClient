@@ -2,12 +2,31 @@ package com.example.reto2androidclient.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.reto2androidclient.R;
+import com.example.reto2androidclient.client.RESTClientClient;
+import com.example.reto2androidclient.client.RESTClientInterface;
+import com.example.reto2androidclient.model.Client;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Controller for the client profile window.
@@ -16,17 +35,87 @@ import com.example.reto2androidclient.R;
  */
 public class ClientProfileActivity extends AppCompatActivity {
 
-    private Button buttonLogOut, buttonChangePassword;
+    private SQLiteDatabase sqLiteDatabase = null;
+
+    private Client client;
+
+    private Button buttonLogOut, buttonChangePassword, buttonEditProfile, buttonCancelEdit;
+    private EditText editTextUsername, editTextFullName, editTextBiography;
+    private String usernameOldValue, fullNameOldValue, biographyOldValue, profileImageOldValue;
+    private ImageButton imageButtonHome, imageButtonSearch, imageButtonWishlist, imageButtonProfile;
+    private ImageView imageViewProfileImage;
+    private Spinner spinnerAvatar;
+    private ArrayAdapter<CharSequence> avatarSpinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_profile);
 
+        sqLiteDatabase = SQLiteDatabase.openDatabase(String.valueOf(getDatabasePath(
+                "sqLiteDatabase")), null, SQLiteDatabase.OPEN_READWRITE);
+
+        client = (Client) getIntent().getExtras().getSerializable("CLIENT");
+
+        editTextUsername = findViewById(R.id.editTextUsernameClientProfile);
+        editTextUsername.setText(client.getLogin());
+        editTextFullName = findViewById(R.id.editTextFullNameClientProfile);
+        editTextFullName.setText(client.getFullName());
+        editTextBiography = findViewById(R.id.editTextBiographyClientProfile);
+        editTextBiography.setText(client.getBiography());
+        disableEditTexts();
+
+        buttonEditProfile = findViewById(R.id.buttonEditProfileClientProfile);
+        buttonEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(buttonEditProfile.getText().toString().equalsIgnoreCase(getString(R.string.clientProfile_saveChangesButton))) {
+                    //User wants to save changes.
+                    if(dataIsValid())
+                        editProfile();
+                } else { //User wants to edit profile.
+                    //Enable EditTexts.
+                    editTextUsername.setEnabled(true);
+                    editTextFullName.setEnabled(true);
+                    editTextBiography.setEnabled(true);
+                    //Enable avatar spinner.
+                    spinnerAvatar.setEnabled(true);
+                    //Enable Cancel Edit button.
+                    buttonCancelEdit.setEnabled(true);
+                    //Changing Edit Profile buttons text.
+                    buttonEditProfile.setText(getString(R.string.clientProfile_saveChangesButton));
+                }
+
+            }
+        });
+
+        buttonCancelEdit = findViewById(R.id.buttonCancelEditClientProfile);
+        buttonCancelEdit.setEnabled(false);
+        buttonCancelEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Resetting EditTexts values...
+                editTextUsername.setText(client.getLogin());
+                editTextFullName.setText(client.getFullName());
+                editTextBiography.setText(client.getBiography());
+                //Resetting avatar spinner.
+                spinnerAvatar.setSelection(avatarSpinnerAdapter.getPosition(profileImageOldValue));
+                //Disable spinner.
+                spinnerAvatar.setEnabled(false);
+                //Disable EditTexts...
+                disableEditTexts();
+                //Disable Cancel button.
+                buttonCancelEdit.setEnabled(false);
+                //Changing Edit Profile buttons text.
+                buttonEditProfile.setText(getString(R.string.clientProfile_editProfileButton));
+            }
+        });
+
         buttonLogOut = findViewById(R.id.buttonLogOutClientProfile);
         buttonLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sqLiteDatabase.execSQL("DELETE FROM sessions WHERE login='"+ client.getLogin() +"'");
                 Intent intentToLogIn = new Intent(ClientProfileActivity.this, LogInActivity.class);
                 startActivity(intentToLogIn);
             }
@@ -36,12 +125,167 @@ public class ClientProfileActivity extends AppCompatActivity {
         buttonChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                passwordChange();
+                throw new UnsupportedOperationException();
             }
         });
+
+        imageButtonProfile = findViewById(R.id.imageButtonProfileClientProfile);
+        imageButtonProfile.setEnabled(false);
+
+        imageButtonHome = findViewById(R.id.imageButtonHomeClientProfile);
+        imageButtonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ClientProfileActivity.this, HomeActivity.class);
+                intent.putExtra("CLIENT", client);
+                startActivity(intent);
+            }
+        });
+
+        imageButtonSearch = findViewById(R.id.imageButtonSearchClientProfile);
+        imageButtonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                throw new UnsupportedOperationException();
+            }
+        });
+
+        imageButtonWishlist = findViewById(R.id.imageButtonWishlistClientProfile);
+        imageButtonWishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                throw new UnsupportedOperationException();
+            }
+        });
+
+        imageViewProfileImage = findViewById(R.id.imageViewProfileImageClientProfile);
+        imageViewProfileImage.setImageResource(getResources()
+                .getIdentifier(client.getProfileImage(), "drawable", getPackageName()));
+
+        spinnerAvatar = findViewById(R.id.spinnerAvatarClientProfile);
+        //Create an ArrayAdapter using the string array and a default spinner layout
+        avatarSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.clientProfile_spinnerAvatars, android.R.layout.simple_spinner_item);
+        //Specify the layout to use when the list of choices appear.
+        avatarSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAvatar.setAdapter(avatarSpinnerAdapter);
+        spinnerAvatar.setEnabled(false);
+        spinnerAvatar.setSelection(avatarSpinnerAdapter.getPosition(getString(getResources()
+                .getIdentifier(client.getProfileImage(), "string", getPackageName()))));
+
     }
 
-    private void passwordChange() {
-        throw new UnsupportedOperationException();
+    private boolean dataIsValid() {
+        boolean ret = true;
+
+        try {
+            if(editTextBiography.getText().length() > 255)
+                throw new IOException(getString(R.string.clientProfile_biographyLengthError));
+            if(editTextFullName.getText().length() > 255 || editTextFullName.getText().length() == 0)
+                throw new IOException(getString(R.string.clientProfile_fullNameLengthError));
+            if(editTextUsername.getText().length() > 255 || editTextUsername.getText().length() == 0)
+                throw new IOException(getString(R.string.clientProfile_loginLengthError));
+        } catch (IOException ex) {
+            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+            ret = false;
+        }
+
+        return ret;
     }
+
+    private void editProfile() {
+        //Saving clients old data in case it is not possible to update the database...
+        usernameOldValue = client.getLogin();
+        fullNameOldValue = client.getFullName();
+        biographyOldValue = client.getBiography();
+        profileImageOldValue = client.getProfileImage();
+
+        //Setting clients new data...
+        client.setLogin(editTextUsername.getText().toString());
+        client.setFullName(editTextFullName.getText().toString());
+        client.setBiography(editTextBiography.getText().toString());
+        String[] profileImagesIds = getResources().getStringArray(R.array.clientProfile_spinnerAvatarsIds);
+        for(int i = 0; i < 11; i++) {
+            if (spinnerAvatar.getSelectedItem().toString().equalsIgnoreCase(getString(getResources()
+                    .getIdentifier(profileImagesIds[i], "string", getPackageName())))) {
+                client.setProfileImage(profileImagesIds[i]);
+                break;
+            }
+        }
+
+        try {
+            RESTClientInterface restClientInterface = RESTClientClient.getClient();
+            Call<ResponseBody> response = restClientInterface.edit(client);
+            response.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    switch(response.code()) {
+                        case 204: //Success
+                            handleProfileUpdateSuccess();
+                            break;
+                        default: //Failure
+                            handleProfileUpdateFailure();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    handleProfileUpdateFailure();
+                }
+            });
+        } catch (Exception ex) {
+            handleProfileUpdateFailure();
+        }
+    }
+
+    private void handleProfileUpdateSuccess() {
+        //Showing success confirmation message.
+        Toast.makeText(getApplicationContext(),
+                R.string.clientProfile_successfulProfileUpdate, Toast.LENGTH_LONG).show();
+        //Disable editTexts...
+        disableEditTexts();
+        //Disable avatar spinner.
+        spinnerAvatar.setEnabled(false);
+        //Updating profile imageView if necessary.
+        if(!profileImageOldValue.equalsIgnoreCase(spinnerAvatar.getSelectedItem().toString())) {
+            imageViewProfileImage.setImageResource(getResources().getIdentifier(
+                    client.getProfileImage(), "drawable", getPackageName()));
+        }
+        //Disable cancel edit button.
+        buttonCancelEdit.setEnabled(false);
+        //Changing Edit Profile buttons text.
+        buttonEditProfile.setText(getString(R.string.clientProfile_editProfileButton));
+        //Update local database.
+        if(!usernameOldValue.equalsIgnoreCase(client.getLogin()))
+            sqLiteDatabase.execSQL("UPDATE sessions SET login = '"+ client.getLogin() + "' WHERE id = 1");
+
+    }
+
+    private void handleProfileUpdateFailure() {
+        //Showing unexpected error message.
+        Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+        //Setting client to its old values...
+        client.setLogin(usernameOldValue);
+        client.setFullName(fullNameOldValue);
+        client.setBiography(biographyOldValue);
+        //Setting old values on editText...
+        editTextUsername.setText(usernameOldValue);
+        editTextFullName.setText(fullNameOldValue);
+        editTextBiography.setText(biographyOldValue);
+        //Setting old value on avatar spinner.
+        spinnerAvatar.setSelection(avatarSpinnerAdapter.getPosition(profileImageOldValue));
+        //Disable editTexts...
+        disableEditTexts();
+        //Disable Cancel Edit button.
+        buttonCancelEdit.setEnabled(false);
+        //Changing Edit Profile text.
+        buttonEditProfile.setText(getString(R.string.clientProfile_editProfileButton));
+    }
+
+    private void disableEditTexts() {
+        editTextUsername.setEnabled(false);
+        editTextFullName.setEnabled(false);
+        editTextBiography.setEnabled(false);
+    }
+
 }

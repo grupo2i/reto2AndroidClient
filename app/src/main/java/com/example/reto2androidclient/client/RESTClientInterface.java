@@ -5,12 +5,11 @@ import com.example.reto2androidclient.model.User;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.GET;
+import retrofit2.http.Body;
 import retrofit2.http.PUT;
-import retrofit2.http.Path;
 
-public interface RESTUserInterface {
+public interface RESTClientInterface {
 
-    @GET("signIn/{login}/{password}")
-    public Call<Client> signIn(@Path("login") String login, @Path("password") String password);
+    @PUT(".")
+    public Call<ResponseBody> edit(@Body Client entity);
 }
