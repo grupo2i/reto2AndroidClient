@@ -17,44 +17,45 @@ import javax.crypto.Cipher;
 public class PublicCrypt {
 
     /**
-     * Cifra un texto con RSA, modo ECB y padding PKCS1Padding (asim�trica) y lo
-     * retorna
+     * Encodes the given message with RSA/ECB/PKCS1Padding and returns it.
      *
-     * @param mensaje El mensaje a cifrar
-     * @return El mensaje cifrado
+     * @param message The message to be encoded.
+     * @return El message cifrado
      */
-    public static String encode(Context context, String mensaje) {
+    public static String encode(Context context, String message) throws Exception {
         String encodedMessageStr = null;
         try {
-            byte[] encodedMessage = null;
+            byte[] encodedMessage;
+            //Getting the public key in a byte array.
+            byte fileKey[] = getPublicKey(context);
 
-            //Reading public key...
-            byte[] fileKey = fileReader(context);
-
+            //Setting the properties for the encoding...
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(fileKey);
             PublicKey publicKey = keyFactory.generatePublic(x509EncodedKeySpec);
 
+            //Encoding with public key...
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            encodedMessage = cipher.doFinal(mensaje.getBytes());
-            //Encoding encoded message to hexadecimal.
-            encodedMessageStr = encodeHexadecimal(encodedMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
+            encodedMessage = cipher.doFinal(message.getBytes());
+
+            //Encoding message to hexadecimal now, to avoid '/' character.
+            encodedMessageStr = encodeToHexadecimal(encodedMessage);
+        } catch (Exception ex) {
+            throw new Exception(ex);
         }
 
         return encodedMessageStr;
     }
 
     /**
-     * Retorna el contenido de un fichero
+     * Reads the public key file and returns it as a byte array.
      *
-     * @return El texto del fichero
+     * @return Private key content in byte array.
+     * @throws IOException If and I/O error occurs.
      */
-    private static byte[] fileReader(Context context) throws Exception {
+    public static byte[] getPublicKey(Context context) throws IOException {
         byte[] ret;
-
         try {
             int id = context.getResources().getIdentifier("public_key", "raw", context.getPackageName());
             InputStream inputStream = context.getResources().openRawResource(id);
@@ -67,22 +68,29 @@ public class PublicCrypt {
             byteArrayOutputStream.flush();
             ret = byteArrayOutputStream.toByteArray();
         } catch (IOException ex) {
-            ex.printStackTrace();
-            throw new Exception();
+            throw new IOException();
         }
 
         return ret;
     }
 
-    static String encodeHexadecimal(byte[] message) {
+    /**
+     * Encodes a byte array into an hexadecimal String and returns it.
+     *
+     * @param message Byte array to be encoded.
+     * @return Encoded hexadecimal representation of the given message.
+     */
+    static String encodeToHexadecimal(byte[] message) {
         String hexadecimalString = "";
         for (int i = 0; i < message.length; i++) {
             String h = Integer.toHexString(message[i] & 0xFF);
-            if (h.length() == 1)
+            if (h.length() == 1) {
                 hexadecimalString += "0";
+            }
             hexadecimalString += h;
         }
         return hexadecimalString.toUpperCase();
     }
+
 }
 

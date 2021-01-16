@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="clientProfile_spinnerAvatars">
+        <item>@string/badass_coffee_avatar</item>
+        <item>@string/crazy_ass_avocado_avatar</item>
+        <item>@string/crazy_ass_sheep_avatar</item>
+        <item>@string/wasted_zombie_avatar</item>
+        <item>@string/punky_avatar</item>
+        <item>@string/normal_guy_avatar</item>
+        <item>@string/puritan_nun_avatar</item>
+        <item>@string/donald_trump_avatar</item>
+        <item>@string/marilyn_monroe_avatar</item>
+        <item>@string/heisenberg_avatar</item>
+        <item>@string/high_af_harley_quinn_avatar</item>
+    </string-array>
+
+    <string-array name="clientProfile_spinnerAvatarsIds">
+        <item>badass_coffee_avatar</item>
+        <item>crazy_ass_avocado_avatar</item>
+        <item>crazy_ass_sheep_avatar</item>
+        <item>wasted_zombie_avatar</item>
+        <item>punky_avatar</item>
+        <item>normal_guy_avatar</item>
+        <item>puritan_nun_avatar</item>
+        <item>donald_trump_avatar</item>
+        <item>marilyn_monroe_avatar</item>
+        <item>heisenberg_avatar</item>
+        <item>high_af_harley_quinn_avatar</item>
+    </string-array>
+</resources>

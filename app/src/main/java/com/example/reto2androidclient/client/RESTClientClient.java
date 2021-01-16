@@ -4,10 +4,10 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-public class RESTUserClient {
-    private static String BASE_URL = "http://192.168.1.192:11238/reto2Server/webresources/entity.user/";
+public class RESTClientClient {
+    private static String BASE_URL = "http://192.168.1.192:11238/reto2Server/webresources/entity.client/";
 
-    public static RESTUserInterface getClient() {
+    public static RESTClientInterface getClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -15,8 +15,8 @@ public class RESTUserClient {
                 .addConverterFactory(SimpleXmlConverterFactory.create());
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
-        RESTUserInterface restUserInterface = retrofit.create(RESTUserInterface.class);
+        RESTClientInterface restClientInterface = retrofit.create(RESTClientInterface.class);
 
-        return restUserInterface;
+        return restClientInterface;
     }
 }

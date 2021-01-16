@@ -18,22 +18,27 @@ import com.example.reto2androidclient.model.Client;
 public class HomeActivity extends AppCompatActivity {
 
     private Client client;
-    private ImageButton imageButtonReload, imageButtonWishlist, imageButtonProfile;
+    private ImageButton imageButtonHome, imageButtonSearch, imageButtonWishlist, imageButtonProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        imageButtonReload = findViewById(R.id.imageButtonReloadHome);
-        imageButtonReload.setOnClickListener(new View.OnClickListener() {
+        client = (Client) getIntent().getExtras().getSerializable("CLIENT");
+
+        imageButtonHome = findViewById(R.id.imageButtonHomeClientProfile);
+        imageButtonHome.setEnabled(false);
+
+        imageButtonSearch = findViewById(R.id.imageButtonSearchHome);
+        imageButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reloadContentList();
+                throw new UnsupportedOperationException();
             }
         });
 
-        imageButtonWishlist = findViewById(R.id.imageButtonWishlistHome);
+        imageButtonWishlist = findViewById(R.id.imageButtonWishlistClientProfile);
         imageButtonWishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        imageButtonProfile = findViewById(R.id.imageButtonProfileHome);
+        imageButtonProfile = findViewById(R.id.imageButtonProfileClientProfile);
         imageButtonProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +57,4 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void reloadContentList() {
-        throw new UnsupportedOperationException();
-    }
 }

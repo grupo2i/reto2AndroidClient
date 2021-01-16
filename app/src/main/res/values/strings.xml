@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">Reto2AndroidClient</string>
+
+    <!-- Common Strings -->
+    <string name="unexpectedError">An unexpected error occurred, please try later.</string>
+
+    <!-- Profile images -->
+    <string name="badass_coffee_avatar">Badass coffee cup</string>
+    <string name="crazy_ass_avocado_avatar">Crazy-ass avocado</string>
+    <string name="crazy_ass_sheep_avatar">Crazy-ass sheep</string>
+    <string name="wasted_zombie_avatar">Wasted zombie</string>
+    <string name="punky_avatar">Punky guy</string>
+    <string name="normal_guy_avatar">Just a normal guy</string>
+    <string name="puritan_nun_avatar">Puritan nun</string>
+    <string name="donald_trump_avatar">Donald Trump</string>
+    <string name="marilyn_monroe_avatar">Marilyn Monroe</string>
+    <string name="heisenberg_avatar">Heisenberg</string>
+    <string name="high_af_harley_quinn_avatar">High af Harley Quinn</string>
+
+    <!-- LogIn -->
+    <string name="logIn_credentialsError">Incorrect username or password.</string>
+    <string name="logIn_emptyFieldsError">Both fields must be filed to log in.</string>
+
+    <!-- Client Profile Activity -->
+    <string name="clientProfile_successfulProfileUpdate">The profile was updated successfully.</string>
+    <string name="clientProfile_editProfileButton">EDIT PROFILE</string>
+    <string name="clientProfile_saveChangesButton">SAVE CHANGES</string>
+    <string name="clientProfile_biographyLengthError">Biography must not be longer than 255 characters.</string>
+    <string name="clientProfile_loginLengthError">Username must not be longer than 255 characters or shorter than 1.</string>
+    <string name="clientProfile_fullNameLengthError">Full name must not be longer than 255 characters or shorter than 1.</string>
+    <string name="clientProfile_profileImage">Profile image:</string>
+
 </resources>
