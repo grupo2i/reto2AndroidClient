@@ -6,14 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.reto2androidclient.R;
 import com.example.reto2androidclient.client.RESTUserFactory;
 import com.example.reto2androidclient.client.RESTUserInterface;
@@ -38,6 +43,8 @@ public class LogInActivity extends AppCompatActivity {
     private Button buttonSignIn, buttonSignUp;
     private EditText editTextLogin, editTextPassword;
     private Switch switchRememberMe;
+    private ImageView imageViewLogo;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,23 @@ public class LogInActivity extends AppCompatActivity {
             //sqLiteDatabase.execSQL("DELETE FROM sessions WHERE login='aitorfidalgo'");
             signIn(cursor.getString(1), cursor.getString(2));
         }
+
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(getApplicationContext(), Uri.parse(
+                    "android.resource://" + getPackageName() + "/" + R.raw.electric_guitar1));
+            mediaPlayer.prepare();
+        } catch(IOException ex) {
+
+        }
+        imageViewLogo = findViewById(R.id.imageViewLogo);
+        imageViewLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.start();
+                YoYo.with(Techniques.Tada).duration(500).repeat(5).playOn(imageViewLogo);
+            }
+        });
 
         buttonSignIn = findViewById(R.id.buttonSignIn);
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
