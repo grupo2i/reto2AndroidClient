@@ -1,12 +1,20 @@
 package com.example.reto2androidclient.model;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
+
 import java.io.Serializable;
 import java.util.Set;
 
+@Root(name="artist")
 public class Artist extends User implements Serializable {
 
+    @ElementList(entry="socialNetwork", inline=true, required = false)
     private Set<SocialNetwork> socialNetworks;
+    @Element(name = "musicGenre", required = false)
     private MusicGenre musicGenre;
+    @ElementList(entry="events", inline=true, required = false)
     private Set<Event> events;
 
 

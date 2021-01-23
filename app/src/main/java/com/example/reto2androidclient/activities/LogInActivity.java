@@ -14,7 +14,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.reto2androidclient.R;
-import com.example.reto2androidclient.client.RESTUserClient;
+import com.example.reto2androidclient.client.RESTUserFactory;
 import com.example.reto2androidclient.client.RESTUserInterface;
 import com.example.reto2androidclient.model.Client;
 import com.example.reto2androidclient.security.PublicCrypt;
@@ -43,6 +43,7 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
+        //Opening or creating SQLite database to store remember me sessions...
         sqLiteDatabase = openOrCreateDatabase("sqLiteDatabase", Context.MODE_PRIVATE, null);
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS sessions " +
                 "(id INT PRIMARY KEY NOT NULL," +
@@ -61,6 +62,7 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
+                    //Getting data from login and password editTexts...
                     String login = editTextLogin.getText().toString();
                     String password = editTextPassword.getText().toString();
                     //Checking if any of the fields is empty...
@@ -75,9 +77,11 @@ public class LogInActivity extends AppCompatActivity {
                     //Sending sign in request to the server.
                     signIn(login, encodedPassword);
                 } catch (IOException ex) {
+                    //Showing Users input error message.
                     Toast.makeText(getApplicationContext(),
                             ex.getMessage(), Toast.LENGTH_LONG).show();
                 } catch (Exception ex) {
+                    //Showing unexpected error message.
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
                 }
@@ -88,6 +92,7 @@ public class LogInActivity extends AppCompatActivity {
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Switching to SignUp activity...
                 Intent intentToSignUp = new Intent(LogInActivity.this, SignUpActivity.class);
                 startActivity(intentToSignUp);
             }
@@ -99,25 +104,34 @@ public class LogInActivity extends AppCompatActivity {
         switchRememberMe = findViewById(R.id.switchRememberMe);
     }
 
+    /**
+     * Makes a sign in request to the server.
+     *
+     * @param login Login of the User trying to sign in.
+     * @param encodedPassword Password of the User trying to sign in, encoded with RSA.
+     */
     private void signIn(String login, String encodedPassword) {
         try {
-            RESTUserInterface restUserInterface = RESTUserClient.getClient();
+            RESTUserInterface restUserInterface = RESTUserFactory.getClient();
             Call<Client> callLogIn = restUserInterface.signIn(login, encodedPassword);
             callLogIn.enqueue(new Callback<Client>() {
                 @Override
                 public void onResponse(Call<Client> call, Response<Client> response) {
                     switch(response.code()) {
                         case 200: //Success.
+                            //Switching to Home activity sending Users data...
                             Client client = response.body();
                             Intent intentToHome = new Intent(LogInActivity.this, HomeActivity.class);
                             intentToHome.putExtra("CLIENT", client);
                             startActivity(intentToHome);
                             break;
                         case 401: //Unauthorized.
+                            //Showing error message id access to the application is denied.
                             Toast.makeText(getApplicationContext(),
                                     getString(R.string.logIn_credentialsError), Toast.LENGTH_LONG).show();
                             break;
-                        default: //Failure
+                        default:
+                            //Showing unexpected error message.
                             Toast.makeText(getApplicationContext(),
                                     getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
                     }
@@ -125,11 +139,13 @@ public class LogInActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Client> call, Throwable t) {
+                    //Showing unexpected error message.
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
                 }
             });
         } catch(Exception ex) {
+            //Showing unexpected error message.
             Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
         }
     }

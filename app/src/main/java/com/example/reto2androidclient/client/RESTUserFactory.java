@@ -4,8 +4,13 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-public class RESTUserClient {
-    private static String BASE_URL = "http://192.168.1.192:11238/reto2Server/webresources/entity.user/";
+/**
+ * Factory for {@link RESTUserInterface} interface.
+ *
+ * @author Aitor Fidalgo
+ */
+public class RESTUserFactory {
+    private static String BASE_URL = "http://192.168.1.132:11238/reto2Server/webresources/entity.user/";
 
     public static RESTUserInterface getClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

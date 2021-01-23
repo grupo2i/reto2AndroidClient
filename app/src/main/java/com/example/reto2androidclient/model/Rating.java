@@ -1,5 +1,8 @@
 package com.example.reto2androidclient.model;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 import java.io.Serializable;
 
 /**
@@ -10,11 +13,13 @@ import java.io.Serializable;
  * @see Event
  * @author Aitor Fidalgo
  */
+@Root(name="rating")
 public class Rating implements Serializable {
 
     /**
      * Compound id used to identify the rating.
      */
+    @Element(name="id")
     private RatingId ratingId;
     /**
      * User that rated the Event.
@@ -26,18 +31,22 @@ public class Rating implements Serializable {
      * See more
      * <a href="https://discourse.hibernate.org/t/embededid-containing-a-foreign-key-of-an-entity-with-inheritance/2334">here</a>
      */
+    @Element(name="client", required=false)
     private User client;
     /**
      * Event that has been rated.
      */
+    @Element(name="event", required=false)
     private Event event;
     /**
      * Brief commentary about an Event made by a User.
      */
+    @Element(name="comment")
     private String comment;
     /**
      * Numeric evaluation of an Event made by a User.
      */
+    @Element(name="rating")
     private Integer rating;
 
     /**

@@ -1,5 +1,8 @@
 package com.example.reto2androidclient.model;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 import java.io.Serializable;
 import java.net.URL;
 
@@ -9,10 +12,14 @@ import java.net.URL;
  * @see Artist
  * @author Aitor Fidalgo
  */
+@Root(name="socialNetwork")
 public class SocialNetwork implements Serializable {
 
+    @Element(name="id")
     private Integer id;
+    @Element(name="socialNetwork")
     private URL socialNetwork;
+    @Element(name="artist")
     private Artist artist;
 
     public Integer getId() {

@@ -1,21 +1,38 @@
 package com.example.reto2androidclient.model;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+@Root(name="event")
 public class Event implements Serializable {
+
+    @Element(name="id", required=false)
     private Integer id;
+    @Element(name="name", required=false)
     private String name;
-    private Date date;
+    @Element(name="date", required=false)
+    private String date;
+    @Element(name="place", required=false)
     private String place;
+    @Element(name="ticketprice", required=false)
     private Float ticketprice;
+    @Element(name="description", required=false)
     private String description;
+    @Element(name="profileImage", required=false)
     private String profileImage;
 
+    @Element(name="club", required=false)
     private Club club;
+    @ElementList(entry="artists", inline=true, required = false)
     private Set<Artist> artists;
+    @ElementList(entry="clients", inline=true, required = false)
     private Set<Client> clients;
+    @ElementList(entry="ratings", inline=true, required = false)
     private Set<Rating> ratings;
 
 
@@ -55,7 +72,7 @@ public class Event implements Serializable {
         return id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -83,7 +100,7 @@ public class Event implements Serializable {
         this.id = id;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
