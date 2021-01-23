@@ -37,7 +37,7 @@ public class ClientProfileActivity extends AppCompatActivity {
 
     private Client client;
 
-    private Button buttonLogOut, buttonChangePassword, buttonEditProfile, buttonCancelEdit;
+    private Button buttonLogOut, buttonChangePassword, buttonEditProfile, buttonCancelEdit, buttonDeleteAccount;
     private EditText editTextUsername, editTextFullName, editTextBiography;
     private String usernameOldValue, fullNameOldValue, biographyOldValue, profileImageOldValue;
     private ImageButton imageButtonHome, imageButtonSearch, imageButtonWishlist, imageButtonProfile;
@@ -170,6 +170,34 @@ public class ClientProfileActivity extends AppCompatActivity {
         spinnerAvatar.setEnabled(false);
         spinnerAvatar.setSelection(avatarSpinnerAdapter.getPosition(getString(getResources()
                 .getIdentifier(client.getProfileImage(), "string", getPackageName()))));
+
+        buttonDeleteAccount = findViewById(R.id.buttonDeleteAccountClientProfile);
+        buttonDeleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RESTClientInterface rest = RESTClientClient.getClient();
+                Call<ResponseBody> call = rest.remove(client.getId());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        switch(response.code()) {
+                            case 204:
+                                Toast.makeText(getApplicationContext(), getString(R.string.clientProfile_successfulDelete), Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(ClientProfileActivity.this, LogInActivity.class);
+                                startActivity(intent);
+                                break;
+                            default:
+                                Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
 
     }
 
