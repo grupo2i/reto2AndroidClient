@@ -18,6 +18,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Controller for the forgot password window.
+ *
+ * @author Aitor Fidalgo
+ */
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private EditText editTextEmail, editTextConfirmEmail;
@@ -35,32 +40,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         buttonResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = editTextEmail.getText().toString();
-                String emailConfirmation = editTextConfirmEmail.getText().toString();
-                if(email.equalsIgnoreCase(emailConfirmation)) {
-                    RESTClientInterface rest = RESTClientClient.getClient();
-                    Call<ResponseBody> call = rest.recoverPassword(email);
-                    call.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            switch(response.code()) {
-                                case 204:
-                                    Toast.makeText(getApplicationContext(), getString(R.string.forgotPassword_passwordReset), Toast.LENGTH_LONG).show();
-                                    break;
-                                case 401:
-                                    Toast.makeText(getApplicationContext(), getString(R.string.forgotPassword_emailNotRegistered), Toast.LENGTH_LONG).show();
-                                    break;
-                                default:
-                                    Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
+                resetPassword();
             }
         });
 
@@ -68,9 +48,45 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Switching to Log In activity...
                 Intent intent = new Intent(ForgotPasswordActivity.this, LogInActivity.class);
                 startActivity(intent);
             }
         });
+    }
+
+    private void resetPassword() {
+        //Checking both emails are equal...
+        String email = editTextEmail.getText().toString();
+        String emailConfirmation = editTextConfirmEmail.getText().toString();
+        if(email.equalsIgnoreCase(emailConfirmation)) {
+            //Sending an email to the Client with the new password...
+            RESTClientInterface rest = RESTClientClient.getClient();
+            Call<ResponseBody> call = rest.recoverPassword(email);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    switch(response.code()) {
+                        case 204:
+                            //The email was sent successfully.
+                            Toast.makeText(getApplicationContext(), getString(R.string.forgotPassword_passwordReset), Toast.LENGTH_LONG).show();
+                            break;
+                        case 401:
+                            //Email is not registered in the database.
+                            Toast.makeText(getApplicationContext(), getString(R.string.forgotPassword_emailNotRegistered), Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            //Unexpected error
+                            Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    //The request did not get to the server.
+                    Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }
