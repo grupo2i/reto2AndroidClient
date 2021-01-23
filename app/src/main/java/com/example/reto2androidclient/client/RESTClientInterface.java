@@ -46,4 +46,13 @@ public interface RESTClientInterface {
     @GET("getAllClients")
     public Call<ClientList> getAllClients();
 
+    /**
+     * Updates the Client with the specified email with a random password
+     * and sends an email to notify it.
+     *
+     * @param email The specifies email.
+     */
+    @PUT("recoverPassword/{email}")
+    public Call<ResponseBody> recoverPassword(@Path("email") String email);
+
 }

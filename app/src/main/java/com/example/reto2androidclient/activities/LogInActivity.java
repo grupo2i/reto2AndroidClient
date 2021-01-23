@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -148,5 +149,10 @@ public class LogInActivity extends AppCompatActivity {
             //Showing unexpected error message.
             Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void handleForgotPassword(View view) {
+        Intent intent = new Intent(LogInActivity.this, ForgotPasswordActivity.class);
+        startActivity(intent);
     }
 }
