@@ -71,7 +71,7 @@ public class LogInActivity extends AppCompatActivity {
                     "android.resource://" + getPackageName() + "/" + R.raw.electric_guitar1));
             mediaPlayer.prepare();
         } catch(IOException ex) {
-
+            Log.e(LogInActivity.class.getName(), "Unable to prepare Media Player.");
         }
         imageViewLogo = findViewById(R.id.imageViewLogo);
         imageViewLogo.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +175,11 @@ public class LogInActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Switches to Forgot Password activity.
+     *
+     * @param view The view that was clicked to execute this method.
+     */
     public void handleForgotPassword(View view) {
         Intent intent = new Intent(LogInActivity.this, ForgotPasswordActivity.class);
         startActivity(intent);
