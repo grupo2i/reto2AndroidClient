@@ -2,9 +2,7 @@ package com.example.reto2androidclient.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -175,16 +173,22 @@ public class ClientProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Checks if the Clients input data is valid or not.
+     *
+     * @return True if input data is valid; False if not.
+     */
     private boolean dataIsValid() {
         boolean ret = true;
 
         try {
+            //Checking all fields have the proper length...
             if(editTextBiography.getText().length() > 255)
-                throw new IOException(getString(R.string.clientProfile_biographyLengthError));
+                throw new IOException(getString(R.string.biographyLengthError));
             if(editTextFullName.getText().length() > 255 || editTextFullName.getText().length() == 0)
-                throw new IOException(getString(R.string.clientProfile_fullNameLengthError));
+                throw new IOException(getString(R.string.fullNameLengthError));
             if(editTextUsername.getText().length() > 255 || editTextUsername.getText().length() == 0)
-                throw new IOException(getString(R.string.clientProfile_loginLengthError));
+                throw new IOException(getString(R.string.loginLengthError));
         } catch (IOException ex) {
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
             ret = false;
@@ -193,6 +197,9 @@ public class ClientProfileActivity extends AppCompatActivity {
         return ret;
     }
 
+    /**
+     * Updates Clients data.
+     */
     private void editProfile() {
         //Saving clients old data in case it is not possible to update the database...
         usernameOldValue = client.getLogin();
@@ -238,6 +245,9 @@ public class ClientProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Makes changes over the layout after Clients data is successfully updated.
+     */
     private void handleProfileUpdateSuccess() {
         //Showing success confirmation message.
         Toast.makeText(getApplicationContext(),
@@ -261,6 +271,9 @@ public class ClientProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Makes changes over the layout after Clients data update is failed.
+     */
     private void handleProfileUpdateFailure() {
         //Showing unexpected error message.
         Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
@@ -282,6 +295,9 @@ public class ClientProfileActivity extends AppCompatActivity {
         buttonEditProfile.setText(getString(R.string.clientProfile_editProfileButton));
     }
 
+    /**
+     * Disables the three editTexts of the layout.
+     */
     private void disableEditTexts() {
         editTextUsername.setEnabled(false);
         editTextFullName.setEnabled(false);
