@@ -6,15 +6,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.reto2androidclient.R;
-import com.example.reto2androidclient.client.RESTUserClient;
+import com.example.reto2androidclient.client.RESTUserFactory;
 import com.example.reto2androidclient.client.RESTUserInterface;
 import com.example.reto2androidclient.model.Client;
 import com.example.reto2androidclient.security.PublicCrypt;
@@ -37,12 +43,15 @@ public class LogInActivity extends AppCompatActivity {
     private Button buttonSignIn, buttonSignUp;
     private EditText editTextLogin, editTextPassword;
     private Switch switchRememberMe;
+    private ImageView imageViewLogo;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
+        //Opening or creating SQLite database to store remember me sessions...
         sqLiteDatabase = openOrCreateDatabase("sqLiteDatabase", Context.MODE_PRIVATE, null);
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS sessions " +
                 "(id INT PRIMARY KEY NOT NULL," +
@@ -56,11 +65,29 @@ public class LogInActivity extends AppCompatActivity {
             signIn(cursor.getString(1), cursor.getString(2));
         }
 
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(getApplicationContext(), Uri.parse(
+                    "android.resource://" + getPackageName() + "/" + R.raw.electric_guitar1));
+            mediaPlayer.prepare();
+        } catch(IOException ex) {
+            Log.e(LogInActivity.class.getName(), "Unable to prepare Media Player.");
+        }
+        imageViewLogo = findViewById(R.id.imageViewLogo);
+        imageViewLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.start();
+                YoYo.with(Techniques.Tada).duration(500).repeat(5).playOn(imageViewLogo);
+            }
+        });
+
         buttonSignIn = findViewById(R.id.buttonSignIn);
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                    //Getting data from login and password editTexts...
                     String login = editTextLogin.getText().toString();
                     String password = editTextPassword.getText().toString();
                     //Checking if any of the fields is empty...
@@ -75,9 +102,11 @@ public class LogInActivity extends AppCompatActivity {
                     //Sending sign in request to the server.
                     signIn(login, encodedPassword);
                 } catch (IOException ex) {
+                    //Showing Users input error message.
                     Toast.makeText(getApplicationContext(),
                             ex.getMessage(), Toast.LENGTH_LONG).show();
                 } catch (Exception ex) {
+                    //Showing unexpected error message.
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
                 }
@@ -88,6 +117,7 @@ public class LogInActivity extends AppCompatActivity {
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Switching to SignUp activity...
                 Intent intentToSignUp = new Intent(LogInActivity.this, SignUpActivity.class);
                 startActivity(intentToSignUp);
             }
@@ -99,25 +129,34 @@ public class LogInActivity extends AppCompatActivity {
         switchRememberMe = findViewById(R.id.switchRememberMe);
     }
 
+    /**
+     * Makes a sign in request to the server.
+     *
+     * @param login Login of the User trying to sign in.
+     * @param encodedPassword Password of the User trying to sign in, encoded with RSA.
+     */
     private void signIn(String login, String encodedPassword) {
         try {
-            RESTUserInterface restUserInterface = RESTUserClient.getClient();
+            RESTUserInterface restUserInterface = RESTUserFactory.getClient();
             Call<Client> callLogIn = restUserInterface.signIn(login, encodedPassword);
             callLogIn.enqueue(new Callback<Client>() {
                 @Override
                 public void onResponse(Call<Client> call, Response<Client> response) {
                     switch(response.code()) {
                         case 200: //Success.
+                            //Switching to Home activity sending Users data...
                             Client client = response.body();
                             Intent intentToHome = new Intent(LogInActivity.this, HomeActivity.class);
                             intentToHome.putExtra("CLIENT", client);
                             startActivity(intentToHome);
                             break;
                         case 401: //Unauthorized.
+                            //Showing error message id access to the application is denied.
                             Toast.makeText(getApplicationContext(),
                                     getString(R.string.logIn_credentialsError), Toast.LENGTH_LONG).show();
                             break;
-                        default: //Failure
+                        default:
+                            //Showing unexpected error message.
                             Toast.makeText(getApplicationContext(),
                                     getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
                     }
@@ -125,12 +164,24 @@ public class LogInActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Client> call, Throwable t) {
+                    //Showing unexpected error message.
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
                 }
             });
         } catch(Exception ex) {
+            //Showing unexpected error message.
             Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Switches to Forgot Password activity.
+     *
+     * @param view The view that was clicked to execute this method.
+     */
+    public void handleForgotPassword(View view) {
+        Intent intent = new Intent(LogInActivity.this, ForgotPasswordActivity.class);
+        startActivity(intent);
     }
 }

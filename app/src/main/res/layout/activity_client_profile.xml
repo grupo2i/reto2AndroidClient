@@ -89,6 +89,7 @@
                 android:layout_marginEnd="16dp"
                 android:ems="10"
                 android:enabled="false"
+                android:hint="@string/clientProfile_fullNameHint"
                 android:inputType="textPersonName"
                 android:text="Full Name"
                 android:textSize="24sp"
@@ -107,6 +108,7 @@
                 android:ems="10"
                 android:enabled="false"
                 android:gravity="start|top"
+                android:hint="@string/clientProfile_biographyHint"
                 android:inputType="textMultiLine"
                 android:text="Here goes a\nmultiline bio of the user."
                 app:layout_constraintEnd_toEndOf="parent"
@@ -135,15 +137,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="25dp"
                 android:text="LOG OUT"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonChangePasswordClientProfile"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonChangePasswordClientProfile" />
 
             <Spinner
                 android:id="@+id/spinnerAvatarClientProfile"
@@ -169,6 +168,24 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextFullNameClientProfile" />
+
+            <Button
+                android:id="@+id/buttonDeleteAccountClientProfile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="25dp"
+                android:backgroundTint="#FF0000"
+                android:text="@string/clientProfile_deleteAccount"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonLogOutClientProfile" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

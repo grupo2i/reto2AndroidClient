@@ -1,5 +1,8 @@
 package com.example.reto2androidclient.model;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 import java.io.Serializable;
 
 /**
@@ -9,15 +12,18 @@ import java.io.Serializable;
  * @see Event
  * @author Aitor Fidalgo
  */
+@Root(name="id")
 public class RatingId implements Serializable {
 
     /**
      * Id of the User that made the Rating.
      */
+    @Element(name="clientId")
     private Integer clientId;
     /**
      * Id of the Event that has been rated.
      */
+    @Element(name="eventId")
     private Integer eventId;
 
     /**

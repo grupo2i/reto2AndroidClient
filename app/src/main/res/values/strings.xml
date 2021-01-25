@@ -3,6 +3,16 @@
 
     <!-- Common Strings -->
     <string name="unexpectedError">An unexpected error occurred, please try later.</string>
+    <string name="loginLengthError">ERROR: Username must not be longer than 255 characters or shorter than 1.</string>
+    <string name="loginAlreadyRegisteredError">ERROR: Username is already registered.</string>
+    <string name="emailLengthError">ERROR: Email must not be longer than 255 characters or shorter than 1.</string>
+    <string name="emailPatternError">ERROR: Email must match the following pattern: example@example.example</string>
+    <string name="emailAlreadyRegisteredError">ERROR: Email is already registered.</string>
+    <string name="passwordLengthError">ERROR: Password must not be longer than 255 characters or shorter than 6.</string>
+    <string name="passwordsDoNotMatchError">ERROR: Password fields must match.</string>
+    <string name="biographyLengthError">ERROR: Biography must not be longer than 255 characters.</string>
+    <string name="fullNameLengthError">ERROR: Full name must not be longer than 255 characters or shorter than 1.</string>
+    <string name="back">Back</string>
 
     <!-- Profile images -->
     <string name="badass_coffee_avatar">Badass coffee cup</string>
@@ -20,14 +30,26 @@
     <!-- LogIn -->
     <string name="logIn_credentialsError">Incorrect username or password.</string>
     <string name="logIn_emptyFieldsError">Both fields must be filed to log in.</string>
+    <string name="logIn_forgotPassword">I forgot my password</string>
+
+    <!-- SignUp -->
+    <string name="signUp_successfulSignUp">Successfully signed up.</string>
 
     <!-- Client Profile Activity -->
     <string name="clientProfile_successfulProfileUpdate">The profile was updated successfully.</string>
     <string name="clientProfile_editProfileButton">EDIT PROFILE</string>
     <string name="clientProfile_saveChangesButton">SAVE CHANGES</string>
-    <string name="clientProfile_biographyLengthError">Biography must not be longer than 255 characters.</string>
-    <string name="clientProfile_loginLengthError">Username must not be longer than 255 characters or shorter than 1.</string>
-    <string name="clientProfile_fullNameLengthError">Full name must not be longer than 255 characters or shorter than 1.</string>
     <string name="clientProfile_profileImage">Profile image:</string>
+    <string name="clientProfile_fullNameHint">Full Name</string>
+    <string name="clientProfile_biographyHint">Biography</string>
+    <string name="clientProfile_deleteAccount">DELETE ACCOUNT</string>
+    <string name="clientProfile_successfulDelete">Account successfully deleted.</string>
+
+    <!-- Forgot Password Activity -->
+    <string name="forgotPassword_emailHint">Email address</string>
+    <string name="forgotPassword_confirmEmailHint">Confirm email address</string>
+    <string name="forgotPassword_resetPassword">RESET PASSWORD</string>
+    <string name="forgotPassword_emailNotRegistered">We could not fiend an account associated with that email.</string>
+    <string name="forgotPassword_passwordReset">An email with the new password was sent.</string>
 
 </resources>

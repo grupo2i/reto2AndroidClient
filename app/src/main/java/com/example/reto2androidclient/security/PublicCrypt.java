@@ -2,6 +2,8 @@ package com.example.reto2androidclient.security;
 
 import android.content.Context;
 
+import com.example.reto2androidclient.exceptions.UnexpectedErrorException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +24,7 @@ public class PublicCrypt {
      * @param message The message to be encoded.
      * @return El message cifrado
      */
-    public static String encode(Context context, String message) throws Exception {
+    public static String encode(Context context, String message) throws UnexpectedErrorException {
         String encodedMessageStr = null;
         try {
             byte[] encodedMessage;
@@ -42,7 +44,7 @@ public class PublicCrypt {
             //Encoding message to hexadecimal now, to avoid '/' character.
             encodedMessageStr = encodeToHexadecimal(encodedMessage);
         } catch (Exception ex) {
-            throw new Exception(ex);
+            throw new UnexpectedErrorException(ex);
         }
 
         return encodedMessageStr;
@@ -56,20 +58,17 @@ public class PublicCrypt {
      */
     public static byte[] getPublicKey(Context context) throws IOException {
         byte[] ret;
-        try {
-            int id = context.getResources().getIdentifier("public_key", "raw", context.getPackageName());
-            InputStream inputStream = context.getResources().openRawResource(id);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            int leidos;
-            byte[] data = new byte[1024];
-            while((leidos = inputStream.read(data, 0, data.length)) != -1) {
-                byteArrayOutputStream.write(data, 0, leidos);
-            }
-            byteArrayOutputStream.flush();
-            ret = byteArrayOutputStream.toByteArray();
-        } catch (IOException ex) {
-            throw new IOException();
+
+        int id = context.getResources().getIdentifier("public_key", "raw", context.getPackageName());
+        InputStream inputStream = context.getResources().openRawResource(id);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int leidos;
+        byte[] data = new byte[1024];
+        while((leidos = inputStream.read(data, 0, data.length)) != -1) {
+            byteArrayOutputStream.write(data, 0, leidos);
         }
+        byteArrayOutputStream.flush();
+        ret = byteArrayOutputStream.toByteArray();
 
         return ret;
     }
