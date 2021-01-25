@@ -22,7 +22,10 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.example.reto2androidclient.R;
 import com.example.reto2androidclient.client.RESTUserFactory;
 import com.example.reto2androidclient.client.RESTUserInterface;
+import com.example.reto2androidclient.exceptions.UnexpectedErrorException;
 import com.example.reto2androidclient.model.Client;
+import com.example.reto2androidclient.model.User;
+import com.example.reto2androidclient.model.UserPrivilege;
 import com.example.reto2androidclient.security.PublicCrypt;
 
 import java.io.IOException;
@@ -44,71 +47,47 @@ public class LogInActivity extends AppCompatActivity {
     private EditText editTextLogin, editTextPassword;
     private Switch switchRememberMe;
     private ImageView imageViewLogo;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayerGuitar, mediaPlayerDoh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        //Opening or creating SQLite database to store remember me sessions...
-        sqLiteDatabase = openOrCreateDatabase("sqLiteDatabase", Context.MODE_PRIVATE, null);
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS sessions " +
-                "(id INT PRIMARY KEY NOT NULL," +
-                "login VARCHAR NOT NULL," +
-                "password VARCHAR NOT NULL)");
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM sessions", null);
-        cursor.moveToFirst();
-        //If there is a session stored in the database log in with that user account.
-        if(cursor.getCount() != 0) {
-            //sqLiteDatabase.execSQL("DELETE FROM sessions WHERE login='aitorfidalgo'");
-            signIn(cursor.getString(1), cursor.getString(2));
-        }
+        //Checking for open sessions to automatically sign in.
+        checkOpenSessions();
 
-        mediaPlayer = new MediaPlayer();
-        try {
-            mediaPlayer.setDataSource(getApplicationContext(), Uri.parse(
-                    "android.resource://" + getPackageName() + "/" + R.raw.electric_guitar1));
-            mediaPlayer.prepare();
-        } catch(IOException ex) {
-            Log.e(LogInActivity.class.getName(), "Unable to prepare Media Player.");
-        }
+        //Initializing MP3 Media Players.
+        initializingMP3Media();
+
+        //Logo animation on image view click...
         imageViewLogo = findViewById(R.id.imageViewLogo);
         imageViewLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer.start();
+                mediaPlayerGuitar.start();
                 YoYo.with(Techniques.Tada).duration(500).repeat(5).playOn(imageViewLogo);
             }
         });
 
+        //Sign In request on button click and button animation on sign in error.
         buttonSignIn = findViewById(R.id.buttonSignIn);
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    //Getting data from login and password editTexts...
-                    String login = editTextLogin.getText().toString();
-                    String password = editTextPassword.getText().toString();
-                    //Checking if any of the fields is empty...
-                    if (login.length() == 0 || password.length() == 0)
-                        throw new IOException(getString(R.string.logIn_emptyFieldsError));
-                    //Encoding password with RSA.
-                    String encodedPassword = PublicCrypt.encode(LogInActivity.this, password);
-                    //Checking if remember me switch is checked...
-                    if (switchRememberMe.isChecked()) {
-                        sqLiteDatabase.execSQL("INSERT INTO sessions VALUES (1, '" + login + "', '" + encodedPassword + "')");
-                    }
-                    //Sending sign in request to the server.
-                    signIn(login, encodedPassword);
+                    //Validates the Users input data and makes a sign in request if everything is ok,
+                    validateData();
                 } catch (IOException ex) {
                     //Showing Users input error message.
                     Toast.makeText(getApplicationContext(),
                             ex.getMessage(), Toast.LENGTH_LONG).show();
+                    playWrongLogInAnimation();
                 } catch (Exception ex) {
                     //Showing unexpected error message.
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+                    playWrongLogInAnimation();
                 }
             }
         });
@@ -127,6 +106,97 @@ public class LogInActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPasswordLogIn);
 
         switchRememberMe = findViewById(R.id.switchRememberMe);
+    }
+
+    /**
+     * Checks for users open sessions and signs in automatically.
+     */
+    private void  checkOpenSessions() {
+        //Opening or creating SQLite database to store remember me sessions...
+        sqLiteDatabase = openOrCreateDatabase("sqLiteDatabase", Context.MODE_PRIVATE, null);
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS sessions " +
+                "(id INT PRIMARY KEY NOT NULL," +
+                "login VARCHAR NOT NULL," +
+                "password VARCHAR NOT NULL)");
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM sessions", null);
+        cursor.moveToFirst();
+        //If there is a session stored in the database log in with that user account.
+        if(cursor.getCount() != 0) {
+            signIn(cursor.getString(1), cursor.getString(2));
+        }
+    }
+
+    /**
+     * Initializes MP3 Media Players used in animations.
+     */
+    private void initializingMP3Media() {
+        mediaPlayerGuitar = new MediaPlayer();
+        mediaPlayerDoh = new MediaPlayer();
+        try {
+            //Setting data source on media players...
+            mediaPlayerGuitar.setDataSource(getApplicationContext(), Uri.parse(
+                    "android.resource://" + getPackageName() + "/" + R.raw.electric_guitar1));
+            mediaPlayerDoh.setDataSource(getApplicationContext(), Uri.parse(
+                    "android.resource://" + getPackageName() + "/" + R.raw.doh));
+            //Preparing media players...
+            mediaPlayerGuitar.prepare();
+            mediaPlayerDoh.prepare();
+        } catch(IOException ex) {
+            Log.e(LogInActivity.class.getName(), "Unable to prepare MP3 Media Players.");
+        }
+    }
+
+    /**
+     * Validates User input data and makes a sign in request if everything is OK.
+     *
+     * @throws IOException If the Users' input data is wrong.
+     * @throws UnexpectedErrorException If anything goes wrong.
+     */
+    private void validateData() throws IOException, UnexpectedErrorException {
+        //Getting data from login and password editTexts...
+        String login = editTextLogin.getText().toString();
+        String password = editTextPassword.getText().toString();
+        //Checking if any of the fields is empty...
+        if (login.length() == 0 || password.length() == 0)
+            throw new IOException(getString(R.string.logIn_emptyFieldsError));
+        //Encoding password with RSA.
+        String encodedPassword = PublicCrypt.encode(LogInActivity.this, password);
+
+        //Making sure only Clients get into de application.
+        RESTUserInterface rest = RESTUserFactory.getClient();
+        Call<User> call = rest.getPrivilege(login);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                switch(response.code()) {
+                    case 200:
+                        User user = response.body();
+                        if(user.getUserPrivilege() == UserPrivilege.CLIENT) {
+                            //The user trying to sign in IS a Client.
+                            //Checking if remember me switch is checked...
+                            if (switchRememberMe.isChecked()) {
+                                sqLiteDatabase.execSQL("INSERT INTO sessions VALUES (1, '" + login + "', '" + encodedPassword + "')");
+                            }
+                            //Sending sign in request to the server.
+                            signIn(login, encodedPassword);
+                        } else {
+                            //The user trying to sign in IS NOT a Client.
+                            Toast.makeText(getApplicationContext(), getString(R.string.logIn_wrongUserPrivilege), Toast.LENGTH_LONG).show();
+                            playWrongLogInAnimation();
+                        }
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+                        playWrongLogInAnimation();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+                playWrongLogInAnimation();
+            }
+        });
     }
 
     /**
@@ -173,6 +243,11 @@ public class LogInActivity extends AppCompatActivity {
             //Showing unexpected error message.
             Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void playWrongLogInAnimation() {
+        mediaPlayerDoh.start();
+        YoYo.with(Techniques.Wave).duration(1000).playOn(buttonSignIn);
     }
 
     /**

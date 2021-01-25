@@ -31,6 +31,7 @@
     <string name="logIn_credentialsError">Incorrect username or password.</string>
     <string name="logIn_emptyFieldsError">Both fields must be filed to log in.</string>
     <string name="logIn_forgotPassword">I forgot my password</string>
+    <string name="logIn_wrongUserPrivilege">Only clients are allowed in the application.</string>
 
     <!-- SignUp -->
     <string name="signUp_successfulSignUp">Successfully signed up.</string>
@@ -51,5 +52,6 @@
     <string name="forgotPassword_resetPassword">RESET PASSWORD</string>
     <string name="forgotPassword_emailNotRegistered">We could not fiend an account associated with that email.</string>
     <string name="forgotPassword_passwordReset">An email with the new password was sent.</string>
+    <string name="forgotPassword_EmailsDoNotMatch">The email addresses do not match.</string>
 
 </resources>
