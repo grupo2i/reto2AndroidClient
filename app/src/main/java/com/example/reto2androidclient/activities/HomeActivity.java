@@ -34,7 +34,8 @@ public class HomeActivity extends AppCompatActivity {
         imageButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                throw new UnsupportedOperationException();
+            Intent intentToSearch = new Intent(HomeActivity.this, SearchActivity.class);
+            startActivity(intentToSearch);
             }
         });
 
