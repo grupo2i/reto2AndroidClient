@@ -72,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     /**
-     * Checks if the Users input data is valid.
+     * Checks if the Users input data is valid and makes a sign up request.
      *
      * @return True if the data is valid; False if not.
      */
@@ -97,47 +97,43 @@ public class SignUpActivity extends AppCompatActivity {
                 throw new IOException(getString(R.string.passwordsDoNotMatchError));
 
             //Checking login and email are not registered already in the database.
-            checkRegisteredUsers();
+            RESTClientInterface restClientInterface = RESTClientClient.getClient();
+            Call<ClientList> callClients = restClientInterface.getAllClients();
+            callClients.enqueue(new Callback<ClientList>() {
+                @Override
+                public void onResponse(Call<ClientList> call, Response<ClientList> response) {
+                    switch(response.code()) {
+                        case 200:
+                            try {
+                                ClientList clients = response.body();
+                                for(Client client:clients.getClients()) {
+                                    if(editTextUsername.getText().toString().equalsIgnoreCase(client.getLogin())) {
+                                        throw new IOException(getString(R.string.loginAlreadyRegisteredError));
+                                    }
+                                    else if(editTextEmail.getText().toString().equalsIgnoreCase(client.getEmail())) {
+                                        throw new IOException(getString(R.string.emailAlreadyRegisteredError));
+                                    }
+                                }
+                                //Login and email are not registered in the database so proceed with the sign up.
+                                signUp();
+                            } catch(IOException ex) {
+                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                            break;
+                        default:
+                            Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ClientList> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
+                }
+            });
         } catch(IOException ex) {
             //Showing Users input error message.
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void checkRegisteredUsers() {
-        RESTClientInterface restClientInterface = RESTClientClient.getClient();
-        Call<ClientList> callClients = restClientInterface.getAllClients();
-        callClients.enqueue(new Callback<ClientList>() {
-            @Override
-            public void onResponse(Call<ClientList> call, Response<ClientList> response) {
-                switch(response.code()) {
-                    case 200:
-                        try {
-                            ClientList clients = response.body();
-                            for(Client client:clients.getClients()) {
-                                if(editTextUsername.getText().toString().equalsIgnoreCase(client.getLogin())) {
-                                    throw new IOException(getString(R.string.loginAlreadyRegisteredError));
-                                }
-                                else if(editTextEmail.getText().toString().equalsIgnoreCase(client.getEmail())) {
-                                    throw new IOException(getString(R.string.emailAlreadyRegisteredError));
-                                }
-                            }
-                            //Login and email are not registered in the database so proceed with the sign up.
-                            signUp();
-                        } catch(IOException ex) {
-                            Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                        break;
-                    default:
-                        Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ClientList> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     /**

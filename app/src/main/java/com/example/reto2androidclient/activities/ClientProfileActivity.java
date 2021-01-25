@@ -18,6 +18,7 @@ import com.example.reto2androidclient.R;
 import com.example.reto2androidclient.client.RESTClientClient;
 import com.example.reto2androidclient.client.RESTClientInterface;
 import com.example.reto2androidclient.model.Client;
+import com.example.reto2androidclient.model.ClientList;
 
 import java.io.IOException;
 
@@ -69,8 +70,7 @@ public class ClientProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(buttonEditProfile.getText().toString().equalsIgnoreCase(getString(R.string.clientProfile_saveChangesButton))) {
                     //User wants to save changes.
-                    if(dataIsValid())
-                        editProfile();
+                    validateData();
                 } else { //User wants to edit profile.
                     //Enable EditTexts.
                     editTextUsername.setEnabled(true);
@@ -175,27 +175,8 @@ public class ClientProfileActivity extends AppCompatActivity {
         buttonDeleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RESTClientInterface rest = RESTClientClient.getClient();
-                Call<ResponseBody> call = rest.remove(client.getId());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        switch(response.code()) {
-                            case 204:
-                                Toast.makeText(getApplicationContext(), getString(R.string.clientProfile_successfulDelete), Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(ClientProfileActivity.this, LogInActivity.class);
-                                startActivity(intent);
-                                break;
-                            default:
-                                Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
-                    }
-                });
+                //Deletes the Users' account.
+                deleteAccount();
             }
         });
 
@@ -206,10 +187,14 @@ public class ClientProfileActivity extends AppCompatActivity {
      *
      * @return True if input data is valid; False if not.
      */
-    private boolean dataIsValid() {
-        boolean ret = true;
-
+    private void validateData() {
         try {
+            //Saving clients old data in case it is not possible to update the database...
+            usernameOldValue = client.getLogin();
+            fullNameOldValue = client.getFullName();
+            biographyOldValue = client.getBiography();
+            profileImageOldValue = client.getProfileImage();
+
             //Checking all fields have the proper length...
             if(editTextBiography.getText().length() > 255)
                 throw new IOException(getString(R.string.biographyLengthError));
@@ -217,38 +202,66 @@ public class ClientProfileActivity extends AppCompatActivity {
                 throw new IOException(getString(R.string.fullNameLengthError));
             if(editTextUsername.getText().length() > 255 || editTextUsername.getText().length() == 0)
                 throw new IOException(getString(R.string.loginLengthError));
+
+            //Checking login and email are not registered already in the database.
+            RESTClientInterface restClientInterface = RESTClientClient.getClient();
+            Call<ClientList> callClients = restClientInterface.getAllClients();
+            callClients.enqueue(new Callback<ClientList>() {
+                @Override
+                public void onResponse(Call<ClientList> call, Response<ClientList> response) {
+                    switch(response.code()) {
+                        case 200:
+                            try {
+                                ClientList clients = response.body();
+                                for(Client client:clients.getClients()) {
+                                    if(editTextUsername.getText().toString().equalsIgnoreCase(client.getLogin())) {
+                                        throw new IOException(getString(R.string.loginAlreadyRegisteredError));
+                                    }
+                                }
+                                //Login and email are not registered in the database so proceed with the sign up.
+                                editProfile();
+                            } catch(IOException ex) {
+                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                                handleProfileUpdateFailure();
+                            }
+                            break;
+                        default:
+                            Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                            handleProfileUpdateFailure();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ClientList> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
+                    handleProfileUpdateFailure();
+                }
+            });
         } catch (IOException ex) {
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-            ret = false;
+            handleProfileUpdateFailure();
         }
-
-        return ret;
     }
 
     /**
      * Updates Clients data.
      */
     private void editProfile() {
-        //Saving clients old data in case it is not possible to update the database...
-        usernameOldValue = client.getLogin();
-        fullNameOldValue = client.getFullName();
-        biographyOldValue = client.getBiography();
-        profileImageOldValue = client.getProfileImage();
-
-        //Setting clients new data...
-        client.setLogin(editTextUsername.getText().toString());
-        client.setFullName(editTextFullName.getText().toString());
-        client.setBiography(editTextBiography.getText().toString());
-        String[] profileImagesIds = getResources().getStringArray(R.array.clientProfile_spinnerAvatarsIds);
-        for(int i = 0; i < 11; i++) {
-            if (spinnerAvatar.getSelectedItem().toString().equalsIgnoreCase(getString(getResources()
-                    .getIdentifier(profileImagesIds[i], "string", getPackageName())))) {
-                client.setProfileImage(profileImagesIds[i]);
-                break;
-            }
-        }
-
         try {
+            //Setting clients new data...
+            client.setLogin(editTextUsername.getText().toString());
+            client.setFullName(editTextFullName.getText().toString());
+            client.setBiography(editTextBiography.getText().toString());
+            String[] profileImagesIds = getResources().getStringArray(R.array.clientProfile_spinnerAvatarsIds);
+            for(int i = 0; i < 11; i++) {
+                if (spinnerAvatar.getSelectedItem().toString().equalsIgnoreCase(getString(getResources()
+                        .getIdentifier(profileImagesIds[i], "string", getPackageName())))) {
+                    client.setProfileImage(profileImagesIds[i]);
+                    break;
+                }
+            }
+
+            //Updating client in the database...
             RESTClientInterface restClientInterface = RESTClientClient.getClient();
             Call<ResponseBody> response = restClientInterface.edit(client);
             response.enqueue(new Callback<ResponseBody>() {
@@ -303,8 +316,6 @@ public class ClientProfileActivity extends AppCompatActivity {
      * Makes changes over the layout after Clients data update is failed.
      */
     private void handleProfileUpdateFailure() {
-        //Showing unexpected error message.
-        Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
         //Setting client to its old values...
         client.setLogin(usernameOldValue);
         client.setFullName(fullNameOldValue);
@@ -330,6 +341,33 @@ public class ClientProfileActivity extends AppCompatActivity {
         editTextUsername.setEnabled(false);
         editTextFullName.setEnabled(false);
         editTextBiography.setEnabled(false);
+    }
+
+    /**
+     * Deletes the users' account.
+     */
+    private void deleteAccount() {
+        RESTClientInterface rest = RESTClientClient.getClient();
+        Call<ResponseBody> call = rest.remove(client.getId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                switch(response.code()) {
+                    case 204:
+                        Toast.makeText(getApplicationContext(), getString(R.string.clientProfile_successfulDelete), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(ClientProfileActivity.this, LogInActivity.class);
+                        startActivity(intent);
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 }

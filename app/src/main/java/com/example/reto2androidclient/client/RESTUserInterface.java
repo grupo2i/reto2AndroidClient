@@ -1,6 +1,7 @@
 package com.example.reto2androidclient.client;
 
 import com.example.reto2androidclient.model.Client;
+import com.example.reto2androidclient.model.User;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -18,5 +19,14 @@ public interface RESTUserInterface {
      */
     @GET("signIn/{login}/{password}")
     public Call<Client> signIn(@Path("login") String login, @Path("password") String password);
+
+    /**
+     * Looks for the UserPrivilege with the specified user.
+     *
+     * @param login The specified login.
+     * @return The User with the specified data.
+     */
+    @GET("getPrivilege/{login}")
+    public Call<User> getPrivilege(@Path("login") String login);
 
 }

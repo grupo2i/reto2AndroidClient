@@ -40,6 +40,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         buttonResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Makes a password reset request.
                 resetPassword();
             }
         });
@@ -55,6 +56,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Makes a password reset request to the server.
+     */
     private void resetPassword() {
         //Checking both emails are equal...
         String email = editTextEmail.getText().toString();
@@ -87,6 +91,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
                 }
             });
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.forgotPassword_EmailsDoNotMatch), Toast.LENGTH_LONG).show();
         }
     }
 }
