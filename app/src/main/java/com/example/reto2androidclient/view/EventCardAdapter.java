@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reto2androidclient.R;
+import com.example.reto2androidclient.model.Club;
 import com.example.reto2androidclient.model.Event;
 
 import java.util.List;
@@ -33,13 +34,19 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
 
     @Override
     public void onBindViewHolder(EventCardViewHolder holder, final int position) {
-        holder.dateTextView.setText(eventList.get(position).getDate());
+        holder.dateTextView.setText(eventList.get(position).getDate().substring(0, eventList.get(position).getDate().indexOf("T")));
         holder.logoImageView.setImageResource(R.drawable.badass_coffee_avatar);
         holder.nameTextView.setText(eventList.get(position).getName());
-        holder.organizerTextView.setText(eventList.get(position).getClub().getFullName());
+
+        Club eventClub = eventList.get(position).getClub();
+        if(eventClub != null)
+            holder.organizerTextView.setText(eventClub.getFullName());
+        else
+            holder.organizerTextView.setText("Club name");
+
         String price = eventList.get(position).getTicketprice().toString() + "€";
         holder.priceTextView.setText(price);
-        holder.timeTextView.setText(eventList.get(position).getDate());
+        //holder.timeTextView.setText(eventList.get(position).getDate());
         holder.locationTextView.setText(eventList.get(position).getPlace());
 
         holder.logoImageView.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +69,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
         TextView nameTextView;
         TextView organizerTextView;
         TextView priceTextView;
-        TextView timeTextView;
+        //TextView timeTextView;
         TextView locationTextView;
 
         public EventCardViewHolder(View view) {
@@ -72,7 +79,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
             nameTextView = view.findViewById(R.id.nameTextView);
             organizerTextView = view.findViewById(R.id.organizerTextView);
             priceTextView = view.findViewById(R.id.priceTextView);
-            timeTextView = view.findViewById(R.id.timeTextView);
+            //timeTextView = view.findViewById(R.id.timeTextView);
             locationTextView = view.findViewById(R.id.locationTextView);
         }
     }

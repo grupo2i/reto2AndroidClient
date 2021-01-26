@@ -65,6 +65,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView"
                 app:layout_constraintVertical_bias="0.0" />
 
+            <!--
             <TextView
                 android:id="@+id/timeTextView"
                 android:layout_width="wrap_content"
@@ -77,6 +78,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dateTextView"
                 app:layout_constraintVertical_bias="0.523" />
+            -->
 
             <TextView
                 android:id="@+id/priceTextView"

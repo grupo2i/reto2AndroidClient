@@ -50,6 +50,9 @@ public class WishlistActivity extends AppCompatActivity {
                         EventList events = response.body();
                         for(Event event : events.getEvents()) {
                             mProductList.add(event);
+                            //set adapter to recyclerview
+                            mAdapter = new EventCardAdapter(mProductList, getApplicationContext());
+                            mRecyclerView.setAdapter(mAdapter);
                         }
                         break;
                     default:
@@ -62,9 +65,5 @@ public class WishlistActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
             }
         });
-
-        //set adapter to recyclerview
-        mAdapter = new EventCardAdapter(mProductList, this);
-        mRecyclerView.setAdapter(mAdapter);
     }
 }
