@@ -10,7 +10,7 @@
         android:id="@+id/txtSearchLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search by location"
+        android:text="Search by club"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.067"
@@ -18,36 +18,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.171" />
 
-    <SearchView
-        android:id="@+id/searchLocation"
-        android:layout_width="371dp"
-        android:hint="Search by location"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSearchLocation" />
-
     <Button
-        android:id="@+id/boton"
+        android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="330dp"
         android:layout_marginEnd="163dp"
-        android:text="Prueba"
+        android:text="Search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <SearchView
-        android:id="@+id/searchArtist"
-        android:layout_width="371dp"
-        android:layout_height="40dp"
-        android:hint="Search by artist"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095" />
 
     <TextView
         android:id="@+id/txtSearchArtist"
@@ -63,23 +42,96 @@
 
     <TextView
         android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="371dp"
+        android:layout_height="40dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="236dp"
+        android:layout_marginEnd="17dp"
         android:hint="Select Date"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/txtSearchDate" />
 
     <TextView
         android:id="@+id/txtSearchDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="298dp"
         android:text="Search by date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/txtClub" />
+    <LinearLayout
+        android:id="@+id/linearLayoutNavigationBar"
+        android:layout_width="416dp"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10px"
+        android:paddingRight="10px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/imageButtonHomeClientProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            app:srcCompat="@drawable/home_icon"
+            tools:srcCompat="@drawable/home_icon" />
+
+        <ImageButton
+            android:id="@+id/imageButtonSearchHome"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            app:srcCompat="@drawable/search_icon"
+            tools:srcCompat="@drawable/search_icon" />
+
+        <ImageButton
+            android:id="@+id/imageButtonWishlistClientProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            app:srcCompat="@drawable/star_icon"
+            tools:srcCompat="@drawable/star_icon" />
+
+        <ImageButton
+            android:id="@+id/imageButtonProfileClientProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            app:srcCompat="@drawable/profile_icon"
+            tools:srcCompat="@drawable/profile_icon" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/txtArtistName"
+        android:layout_width="371dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="17dp"
+        android:ems="10"
+        android:hint="Type artist name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSearchArtist" />
+
+    <EditText
+        android:id="@+id/txtClub"
+        android:layout_width="371dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="19dp"
+        android:ems="10"
+        android:hint="Type club"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSearchLocation" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

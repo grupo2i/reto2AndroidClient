@@ -10,7 +10,7 @@ import java.util.Set;
 @Root(name="artist")
 public class Artist extends User implements Serializable {
 
-    @ElementList(entry="socialNetwork", inline=true, required = false)
+    @ElementList(entry="socialNetworks", inline=true, required = false)
     private Set<SocialNetwork> socialNetworks;
     @Element(name = "musicGenre", required = false)
     private MusicGenre musicGenre;

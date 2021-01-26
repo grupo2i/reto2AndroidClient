@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 
 import com.example.reto2androidclient.R;
 import com.example.reto2androidclient.model.Client;
+import com.example.reto2androidclient.model.Event;
 
 /**
  * Controller for the Home window.
@@ -19,6 +20,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Client client;
     private ImageButton imageButtonHome, imageButtonSearch, imageButtonWishlist, imageButtonProfile;
+    private Event events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         client = (Client) getIntent().getExtras().getSerializable("CLIENT");
+        events = (Event) getIntent().getExtras().getSerializable("Filtered");
 
         imageButtonHome = findViewById(R.id.imageButtonHomeClientProfile);
         imageButtonHome.setEnabled(false);
@@ -35,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             Intent intentToSearch = new Intent(HomeActivity.this, SearchActivity.class);
+            intentToSearch.putExtra("CLIENT", client);
             startActivity(intentToSearch);
             }
         });
