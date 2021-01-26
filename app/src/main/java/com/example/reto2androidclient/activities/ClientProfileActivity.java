@@ -152,7 +152,9 @@ public class ClientProfileActivity extends AppCompatActivity {
         imageButtonWishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                throw new UnsupportedOperationException();
+                Intent intent = new Intent(ClientProfileActivity.this, WishlistActivity.class);
+                intent.putExtra("CLIENT", client);
+                startActivity(intent);
             }
         });
 

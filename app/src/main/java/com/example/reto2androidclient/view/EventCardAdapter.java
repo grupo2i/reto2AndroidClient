@@ -1,6 +1,7 @@
 package com.example.reto2androidclient.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reto2androidclient.BuildConfig;
 import com.example.reto2androidclient.R;
 import com.example.reto2androidclient.model.Club;
 import com.example.reto2androidclient.model.Event;
@@ -35,7 +37,9 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
     @Override
     public void onBindViewHolder(EventCardViewHolder holder, final int position) {
         holder.dateTextView.setText(eventList.get(position).getDate().substring(0, eventList.get(position).getDate().indexOf("T")));
-        holder.logoImageView.setImageResource(R.drawable.badass_coffee_avatar);
+
+        holder.logoImageView.setImageResource(Resources.getSystem().getIdentifier(eventList.get(position).getProfileImage(), "drawable", context.getPackageName()));
+
         holder.nameTextView.setText(eventList.get(position).getName());
 
         Club eventClub = eventList.get(position).getClub();

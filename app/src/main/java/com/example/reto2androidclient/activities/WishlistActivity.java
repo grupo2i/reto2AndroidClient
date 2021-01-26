@@ -46,10 +46,10 @@ public class WishlistActivity extends AppCompatActivity {
         if(client.getEvents() != null) {
             for(Event event : client.getEvents()) {
                 mProductList.add(event);
-                //set adapter to recyclerview
-                mAdapter = new EventCardAdapter(mProductList, getApplicationContext());
-                mRecyclerView.setAdapter(mAdapter);
             }
+            //set adapter to recyclerview
+            mAdapter = new EventCardAdapter(mProductList, getApplicationContext());
+            mRecyclerView.setAdapter(mAdapter);
         } else {
             Toast.makeText(getApplicationContext(), "No events in wishlist.", Toast.LENGTH_LONG).show();
         }

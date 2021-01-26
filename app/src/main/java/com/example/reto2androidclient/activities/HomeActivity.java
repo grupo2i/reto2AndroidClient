@@ -94,10 +94,10 @@ public class HomeActivity extends AppCompatActivity {
                         EventList events = response.body();
                         for(Event event : events.getEvents()) {
                             mProductList.add(event);
-                            //set adapter to recyclerview
-                            mAdapter = new EventCardAdapter(mProductList, getApplicationContext());
-                            mRecyclerView.setAdapter(mAdapter);
                         }
+                        //set adapter to recyclerview
+                        mAdapter = new EventCardAdapter(mProductList, getApplicationContext());
+                        mRecyclerView.setAdapter(mAdapter);
                         break;
                     default:
                         Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
