@@ -43,7 +43,9 @@ public class HomeActivity extends AppCompatActivity {
         imageButtonWishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                throw new UnsupportedOperationException();
+                Intent intentToWishlist = new Intent(HomeActivity.this, WishlistActivity.class);
+                intentToWishlist.putExtra("CLIENT", client);
+                startActivity(intentToWishlist);
             }
         });
 

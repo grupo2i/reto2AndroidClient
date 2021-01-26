@@ -54,4 +54,11 @@
     <string name="forgotPassword_passwordReset">An email with the new password was sent.</string>
     <string name="forgotPassword_EmailsDoNotMatch">The email addresses do not match.</string>
 
+    <!-- Event Card Layout -->
+    <string name="date">date</string>
+    <string name="event_title">Event title</string>
+    <string name="event_organizer">Event organizer</string>
+    <string name="price">price</string>
+    <string name="time">time</string>
+    <string name="location">Location</string>
 </resources>

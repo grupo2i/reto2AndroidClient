@@ -8,13 +8,13 @@ import java.util.List;
 @Root(name="events")
 public class EventList {
     @ElementList(entry="event", inline=true)
-    private List<Client> events;
+    private List<Event> events;
 
-    public List<Client> getClients() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setClients(List<Client> clients) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 }
