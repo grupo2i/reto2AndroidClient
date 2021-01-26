@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.reto2androidclient.BuildConfig;
 import com.example.reto2androidclient.R;
 import com.example.reto2androidclient.model.Club;
 import com.example.reto2androidclient.model.Event;
@@ -46,11 +45,10 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
         if(eventClub != null)
             holder.organizerTextView.setText(eventClub.getFullName());
         else
-            holder.organizerTextView.setText("Club name");
+            holder.organizerTextView.setText(R.string.event_name);
 
         String price = eventList.get(position).getTicketprice().toString() + "€";
         holder.priceTextView.setText(price);
-        //holder.timeTextView.setText(eventList.get(position).getDate());
         holder.locationTextView.setText(eventList.get(position).getPlace());
 
         holder.logoImageView.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +71,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
         TextView nameTextView;
         TextView organizerTextView;
         TextView priceTextView;
-        //TextView timeTextView;
         TextView locationTextView;
 
         public EventCardViewHolder(View view) {
@@ -83,7 +80,6 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
             nameTextView = view.findViewById(R.id.nameTextView);
             organizerTextView = view.findViewById(R.id.organizerTextView);
             priceTextView = view.findViewById(R.id.priceTextView);
-            //timeTextView = view.findViewById(R.id.timeTextView);
             locationTextView = view.findViewById(R.id.locationTextView);
         }
     }

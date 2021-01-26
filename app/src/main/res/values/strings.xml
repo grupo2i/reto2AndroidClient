@@ -55,10 +55,13 @@
     <string name="forgotPassword_EmailsDoNotMatch">The email addresses do not match.</string>
 
     <!-- Event Card Layout -->
-    <string name="date">date</string>
-    <string name="event_title">Event title</string>
+    <string name="date">Date</string>
+    <string name="event_name">Event name</string>
     <string name="event_organizer">Event organizer</string>
-    <string name="price">price</string>
-    <string name="time">time</string>
+    <string name="price">Price</string>
+    <string name="description">Description</string>
     <string name="location">Location</string>
+    <string name="club">Club</string>
+    <string name="artists">Artists</string>
+    <string name="ratings">Ratings</string>
 </resources>
