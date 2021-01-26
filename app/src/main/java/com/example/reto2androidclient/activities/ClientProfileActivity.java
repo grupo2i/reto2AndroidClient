@@ -203,40 +203,44 @@ public class ClientProfileActivity extends AppCompatActivity {
             if(editTextUsername.getText().length() > 255 || editTextUsername.getText().length() == 0)
                 throw new IOException(getString(R.string.loginLengthError));
 
-            //Checking login and email are not registered already in the database.
-            RESTClientInterface restClientInterface = RESTClientClient.getClient();
-            Call<ClientList> callClients = restClientInterface.getAllClients();
-            callClients.enqueue(new Callback<ClientList>() {
-                @Override
-                public void onResponse(Call<ClientList> call, Response<ClientList> response) {
-                    switch(response.code()) {
-                        case 200:
-                            try {
-                                ClientList clients = response.body();
-                                for(Client client:clients.getClients()) {
-                                    if(editTextUsername.getText().toString().equalsIgnoreCase(client.getLogin())) {
-                                        throw new IOException(getString(R.string.loginAlreadyRegisteredError));
+            if(!editTextUsername.getText().toString().equals(usernameOldValue)) {
+                //Checking login is not registered already in the database.
+                RESTClientInterface restClientInterface = RESTClientClient.getClient();
+                Call<ClientList> callClients = restClientInterface.getAllClients();
+                callClients.enqueue(new Callback<ClientList>() {
+                    @Override
+                    public void onResponse(Call<ClientList> call, Response<ClientList> response) {
+                        switch(response.code()) {
+                            case 200:
+                                try {
+                                    ClientList clients = response.body();
+                                    for(Client client:clients.getClients()) {
+                                        if(editTextUsername.getText().toString().equalsIgnoreCase(client.getLogin())) {
+                                            throw new IOException(getString(R.string.loginAlreadyRegisteredError));
+                                        }
                                     }
+                                    //Login and email are not registered in the database so proceed with the sign up.
+                                    editProfile();
+                                } catch(IOException ex) {
+                                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                                    handleProfileUpdateFailure();
                                 }
-                                //Login and email are not registered in the database so proceed with the sign up.
-                                editProfile();
-                            } catch(IOException ex) {
-                                Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
                                 handleProfileUpdateFailure();
-                            }
-                            break;
-                        default:
-                            Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
-                            handleProfileUpdateFailure();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<ClientList> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
-                    handleProfileUpdateFailure();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<ClientList> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
+                        handleProfileUpdateFailure();
+                    }
+                });
+            } else {
+                editProfile();
+            }
         } catch (IOException ex) {
             Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
             handleProfileUpdateFailure();
