@@ -10,7 +10,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
  * @author Aitor Fidalgo
  */
 public class RESTUserFactory {
-    private static String BASE_URL = "http://192.168.1.132:11238/reto2Server/webresources/entity.user/";
+    private static String BASE_URL = "http://192.168.20.253:8080/reto2Server/webresources/entity.user/";
 
     public static RESTUserInterface getClient() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
