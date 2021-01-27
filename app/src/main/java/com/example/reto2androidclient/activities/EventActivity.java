@@ -62,9 +62,11 @@ public class EventActivity extends AppCompatActivity {
                     case 200:
                         RatingList ratings = response.body();
                         for(Rating r : ratings.getRatings()) {
-                            if(r.getId().getEventId() == event.getId()) {
+                            int ratingEventId = r.getId().getEventId();
+                            int eventId = event.getId();
+                            if(ratingEventId == eventId) {
                                 rating = r;
-                                ratingBar.setNumStars(rating.getRating());
+                                ratingBar.setRating(rating.getRating());
                                 editTextTextMultiLine.setText(rating.getComment());
                             }
                         }
@@ -96,12 +98,10 @@ public class EventActivity extends AppCompatActivity {
                 rating = new Rating();
                 rating.setClient(client);
                 rating.setEvent(event);
-                rating.setRating(ratingBar.getNumStars());
-                rating.setComment(editTextTextMultiLine.getText().toString());
-            } else {
-                rating.setRating(ratingBar.getNumStars());
-                rating.setComment(editTextTextMultiLine.getText().toString());
             }
+            rating.setRating((int)ratingBar.getRating());
+            rating.setComment(editTextTextMultiLine.getText().toString());
+
             Call<ResponseBody> callEditRating = restRatingInterface.edit(rating);
             callEditRating.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -126,14 +126,14 @@ public class EventActivity extends AppCompatActivity {
         nameTextView.setText(event.getName());
         placeTextView.setText(event.getPlace());
         descriptionTextView.setText(event.getDescription());
-        priceTextView.setText(String.valueOf(event.getTicketprice()));
+        priceTextView.setText(event.getTicketprice() + "€");
         //ratingsTextView = (TextView)findViewById(R.id.ratingsTextView);
         if(!event.getArtists().isEmpty()) {
             String artists = "";
             for(Artist a : event.getArtists()) {
                 artists += a.getFullName() + ", ";
             }
-            artists = artists.substring(artists.lastIndexOf(","));
+            artists = artists.substring(0, artists.lastIndexOf(","));
             artistsTextView.setText(artists);
         }
         clubTextView.setText(event.getClub().getFullName());

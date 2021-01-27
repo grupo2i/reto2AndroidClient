@@ -55,17 +55,17 @@
         android:layout_marginTop="16dp"
         android:text="@string/artists"
         app:layout_constraintStart_toEndOf="@+id/logoImageView"
-        app:layout_constraintTop_toBottomOf="@+id/placeTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/clubTextView" />
 
     <TextView
         android:id="@+id/clubTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="16dp"
         android:text="@string/club"
-        app:layout_constraintStart_toEndOf="@+id/placeTextView"
-        app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
+        app:layout_constraintStart_toEndOf="@+id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
 
     <TextView
         android:id="@+id/placeTextView"
@@ -74,8 +74,8 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="16dp"
         android:text="@string/location"
-        app:layout_constraintStart_toEndOf="@+id/logoImageView"
-        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+        app:layout_constraintStart_toEndOf="@+id/clubTextView"
+        app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
 
     <TextView
         android:id="@+id/descriptionTextView"
