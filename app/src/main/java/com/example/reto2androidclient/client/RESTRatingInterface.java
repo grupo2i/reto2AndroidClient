@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -24,6 +25,15 @@ public interface RESTRatingInterface {
      */
     @PUT(".")
     public Call<ResponseBody> edit(@Body Rating entity);
+
+    /**
+     * Saves a new Rating in the database with the specified data.
+     *
+     * @param entity Rating containing to create.
+     * @return Http response code.
+     */
+    @POST(".")
+    public Call<ResponseBody> create(@Body Rating entity);
 
     /**
      * Retrieves all Ratings associated to the client from the database.

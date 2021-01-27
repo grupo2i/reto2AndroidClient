@@ -48,8 +48,7 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
     public void onBindViewHolder(EventCardViewHolder holder, final int position) {
         holder.dateTextView.setText(eventList.get(position).getDate().substring(0, eventList.get(position).getDate().indexOf("T")));
 
-        holder.logoImageView.setImageResource(Resources.getSystem().getIdentifier(eventList.get(position).getProfileImage(), "drawable", context.getPackageName()));
-
+        holder.logoImageView.setImageResource(context.getResources().getIdentifier(eventList.get(position).getProfileImage(), "drawable", context.getPackageName()));
         holder.nameTextView.setText(eventList.get(position).getName());
 
         Club eventClub = eventList.get(position).getClub();
@@ -65,11 +64,8 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
         holder.logoImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //String productName = eventList.get(position).getName();
-                //Toast.makeText(context, productName + " is selected", Toast.LENGTH_SHORT).show();
                 Intent eventIntent = new Intent(context, EventActivity.class);
                 eventIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                //eventIntent.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
                 eventIntent.putExtra("CLIENT", client);
                 eventIntent.putExtra("EVENT", eventList.get(position));
                 context.startActivity(eventIntent);

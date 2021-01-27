@@ -3,13 +3,19 @@ package com.example.reto2androidclient.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.reto2androidclient.R;
+import com.example.reto2androidclient.client.RESTClientClient;
+import com.example.reto2androidclient.client.RESTClientInterface;
+import com.example.reto2androidclient.client.RESTEventClient;
+import com.example.reto2androidclient.client.RESTEventInterface;
 import com.example.reto2androidclient.client.RESTRatingClient;
 import com.example.reto2androidclient.client.RESTRatingInterface;
 import com.example.reto2androidclient.model.Artist;
 import com.example.reto2androidclient.model.Client;
 import com.example.reto2androidclient.model.Event;
 import com.example.reto2androidclient.model.Rating;
+import com.example.reto2androidclient.model.RatingId;
 import com.example.reto2androidclient.model.RatingList;
+import com.example.reto2androidclient.model.User;
 
 import android.os.Bundle;
 import android.view.View;
@@ -47,6 +53,10 @@ public class EventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
+        //TODO: -Show rating average
+        //      -Save new rating
+        //      -Add to wishlist
 
         //Get event and client
         client = (Client)getIntent().getExtras().getSerializable("CLIENT");
@@ -98,27 +108,50 @@ public class EventActivity extends AppCompatActivity {
                 rating = new Rating();
                 rating.setClient(client);
                 rating.setEvent(event);
-            }
-            rating.setRating((int)ratingBar.getRating());
-            rating.setComment(editTextTextMultiLine.getText().toString());
+                rating.setId(new RatingId(client.getId(), event.getId()));
+                rating.setRating((int)ratingBar.getRating());
+                rating.setComment(editTextTextMultiLine.getText().toString());
+                event.getRatings().add(rating);
 
-            Call<ResponseBody> callEditRating = restRatingInterface.edit(rating);
-            callEditRating.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    switch(response.code()) {
-                        case 200:
-                            Toast.makeText(getApplicationContext(), R.string.saved_rating, Toast.LENGTH_LONG).show();
-                            break;
-                        default:
-                            Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                RESTEventInterface restEventInterface = RESTEventClient.getClient();
+                Call<ResponseBody> callClientEdit = restEventInterface.edit(event);
+                callClientEdit.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        switch(response.code()) {
+                            case 200:
+                                Toast.makeText(getApplicationContext(), R.string.saved_rating, Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                        }
                     }
-                }
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                rating.setRating((int)ratingBar.getRating());
+                rating.setComment(editTextTextMultiLine.getText().toString());
+                Call<ResponseBody> callEditRating = restRatingInterface.edit(rating);
+                callEditRating.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        switch(response.code()) {
+                            case 204:
+                                Toast.makeText(getApplicationContext(), R.string.saved_rating, Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         });
 
         logoImageView.setImageResource(getResources().getIdentifier(event.getProfileImage(), "drawable", getPackageName()));
