@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //Populate the products
         mProductList = new ArrayList<>();
-        RESTEventInterface restEventInterface = RESTEventClient.getEvent();
+        RESTEventInterface restEventInterface = RESTEventClient.getClient();
         Call<EventList> callEvents = restEventInterface.getAllEvents();
         callEvents.enqueue(new Callback<EventList>() {
             @Override
@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
                             mProductList.add(event);
                         }
                         //set adapter to recyclerview
-                        mAdapter = new EventCardAdapter(mProductList, getApplicationContext());
+                        mAdapter = new EventCardAdapter(mProductList, getApplicationContext(), client);
                         mRecyclerView.setAdapter(mAdapter);
                         break;
                     default:

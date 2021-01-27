@@ -1,6 +1,7 @@
 package com.example.reto2androidclient.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +13,28 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reto2androidclient.R;
+import com.example.reto2androidclient.activities.EventActivity;
+import com.example.reto2androidclient.activities.HomeActivity;
+import com.example.reto2androidclient.activities.LogInActivity;
+import com.example.reto2androidclient.activities.WishlistActivity;
+import com.example.reto2androidclient.model.Client;
 import com.example.reto2androidclient.model.Club;
 import com.example.reto2androidclient.model.Event;
 
 import java.util.List;
 
+import static android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.EventCardViewHolder> {
     private List<Event> eventList;
     Context context;
+    Client client;
 
-    public EventCardAdapter(List<Event> eventList, Context context) {
+    public EventCardAdapter(List<Event> eventList, Context context, Client client) {
         this.eventList = eventList;
         this.context = context;
+        this.client = client;
     }
 
     @Override
@@ -54,8 +65,14 @@ public class EventCardAdapter extends RecyclerView.Adapter<EventCardAdapter.Even
         holder.logoImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String productName = eventList.get(position).getName();
-                Toast.makeText(context, productName + " is selected", Toast.LENGTH_SHORT).show();
+                //String productName = eventList.get(position).getName();
+                //Toast.makeText(context, productName + " is selected", Toast.LENGTH_SHORT).show();
+                Intent eventIntent = new Intent(context, EventActivity.class);
+                eventIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                //eventIntent.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK);
+                eventIntent.putExtra("CLIENT", client);
+                eventIntent.putExtra("EVENT", eventList.get(position));
+                context.startActivity(eventIntent);
             }
         });
     }

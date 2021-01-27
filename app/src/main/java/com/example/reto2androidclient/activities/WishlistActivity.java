@@ -48,39 +48,10 @@ public class WishlistActivity extends AppCompatActivity {
                 mProductList.add(event);
             }
             //set adapter to recyclerview
-            mAdapter = new EventCardAdapter(mProductList, getApplicationContext());
+            mAdapter = new EventCardAdapter(mProductList, getApplicationContext(), client);
             mRecyclerView.setAdapter(mAdapter);
         } else {
             Toast.makeText(getApplicationContext(), "No events in wishlist.", Toast.LENGTH_LONG).show();
         }
-
-        //Get all events from database
-        /*
-        RESTEventInterface restEventInterface = RESTEventClient.getEvent();
-        Call<EventList> callEvents = restEventInterface.getAllEvents();
-        callEvents.enqueue(new Callback<EventList>() {
-            @Override
-            public void onResponse(Call<EventList> call, Response<EventList> response) {
-                switch(response.code()) {
-                    case 200:
-                        EventList events = response.body();
-                        for(Event event : events.getEvents()) {
-                            mProductList.add(event);
-                            //set adapter to recyclerview
-                            mAdapter = new EventCardAdapter(mProductList, getApplicationContext());
-                            mRecyclerView.setAdapter(mAdapter);
-                        }
-                        break;
-                    default:
-                        Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<EventList> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
-            }
-        });
-        */
     }
 }

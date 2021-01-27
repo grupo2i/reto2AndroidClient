@@ -10,90 +10,127 @@
         android:id="@+id/logoImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/badass_coffee_avatar"
-        app:srcCompat="@drawable/badass_coffee_avatar"
-        tools:layout_editor_absoluteX="141dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <TextView
-        android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/date"
-        tools:layout_editor_absoluteX="191dp"
-        tools:layout_editor_absoluteY="194dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/badass_coffee_avatar" />
 
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
         android:text="@string/event_name"
-        tools:layout_editor_absoluteX="169dp"
-        tools:layout_editor_absoluteY="158dp" />
-
-    <TextView
-        android:id="@+id/placeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/location"
-        tools:layout_editor_absoluteX="178dp"
-        tools:layout_editor_absoluteY="259dp" />
-
-    <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/description"
-        tools:layout_editor_absoluteX="170dp"
-        tools:layout_editor_absoluteY="324dp" />
+        app:layout_constraintStart_toEndOf="@+id/logoImageView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/priceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
         android:text="@string/price"
-        tools:layout_editor_absoluteX="189dp"
-        tools:layout_editor_absoluteY="291dp" />
+        app:layout_constraintStart_toEndOf="@+id/dateTextView"
+        app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
     <TextView
-        android:id="@+id/ratingsTextView"
+        android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ratings"
-        tools:layout_editor_absoluteX="182dp"
-        tools:layout_editor_absoluteY="392dp" />
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/date"
+        app:layout_constraintStart_toEndOf="@+id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
     <TextView
         android:id="@+id/artistsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
         android:text="@string/artists"
-        tools:layout_editor_absoluteX="184dp"
-        tools:layout_editor_absoluteY="356dp" />
+        app:layout_constraintStart_toEndOf="@+id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@+id/placeTextView" />
 
     <TextView
         android:id="@+id/clubTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
         android:text="@string/club"
-        tools:layout_editor_absoluteX="191dp"
-        tools:layout_editor_absoluteY="228dp" />
+        app:layout_constraintStart_toEndOf="@+id/placeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
+
+    <TextView
+        android:id="@+id/placeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/location"
+        app:layout_constraintStart_toEndOf="@+id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
+
+    <TextView
+        android:id="@+id/ratingsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/ratings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
 
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="426dp" />
+        android:layout_marginTop="16dp"
+        android:autofillHints="@string/rating_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingsTextView" />
 
     <EditText
         android:id="@+id/editTextTextMultiLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:autofillHints="@string/rating_comment"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="@string/rating_comment"
         android:inputType="textMultiLine"
-        tools:layout_editor_absoluteX="101dp"
-        tools:layout_editor_absoluteY="494dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+
+    <Button
+        android:id="@+id/saveRatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/save_rating"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,14 +6,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 /**
- * Factory for {@link RESTEventInterface} interface.
+ * Factory for {@link RESTRatingInterface} interface.
  *
  * @author Martin Angulo
  */
-public class RESTEventClient {
-    private static String BASE_URL = "http://192.168.21.122:8080/reto2Server/webresources/entity.event/";
+public class RESTRatingClient {
+    private static String BASE_URL = "http://192.168.21.122:8080/reto2Server/webresources/entity.rating/";
 
-    public static RESTEventInterface getClient() {
+    public static RESTRatingInterface getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(interceptor);
@@ -23,8 +23,8 @@ public class RESTEventClient {
                 .addConverterFactory(SimpleXmlConverterFactory.create());
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
-        RESTEventInterface restEventInterface = retrofit.create(RESTEventInterface.class);
+        RESTRatingInterface restRatingInterface = retrofit.create(RESTRatingInterface.class);
 
-        return restEventInterface;
+        return restRatingInterface;
     }
 }
