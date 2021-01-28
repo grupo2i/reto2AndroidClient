@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private EventCardAdapter mAdapter;
     private List<Event> mProductList;
-    private Event events;
+    private List<Event> events = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         client = (Client) getIntent().getExtras().getSerializable("CLIENT");
-        events = (Event) getIntent().getExtras().getSerializable("Filtered");
+        events =  (List<Event>)getIntent().getExtras().getSerializable("Filtered");
 
         imageButtonHome = findViewById(R.id.imageButtonHomeClientProfile);
         imageButtonHome.setEnabled(false);
@@ -87,31 +87,37 @@ public class HomeActivity extends AppCompatActivity {
 
         //Populate the products
         mProductList = new ArrayList<>();
-        RESTEventInterface restEventInterface = RESTEventClient.getClient();
-        Call<EventList> callEvents = restEventInterface.getAllEvents();
-        callEvents.enqueue(new Callback<EventList>() {
-            @Override
-            public void onResponse(Call<EventList> call, Response<EventList> response) {
-                switch(response.code()) {
-                    case 200:
-                        EventList events = response.body();
-                        for(Event event : events.getEvents()) {
-                            mProductList.add(event);
-                        }
-                        //set adapter to recyclerview
-                        mAdapter = new EventCardAdapter(mProductList, getApplicationContext(), client);
-                        mRecyclerView.setAdapter(mAdapter);
-                        break;
-                    default:
-                        Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+        if(events != null) {
+            mProductList.addAll(events);
+            //set adapter to recyclerview
+            mAdapter = new EventCardAdapter(mProductList, getApplicationContext(), client);
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            RESTEventInterface restEventInterface = RESTEventClient.getClient();
+            Call<EventList> callEvents = restEventInterface.getAllEvents();
+            callEvents.enqueue(new Callback<EventList>() {
+                @Override
+                public void onResponse(Call<EventList> call, Response<EventList> response) {
+                    switch(response.code()) {
+                        case 200:
+                            EventList evs = response.body();
+                            for(Event event : evs.getEvents()) {
+                                mProductList.add(event);
+                            }
+                            //set adapter to recyclerview
+                            mAdapter = new EventCardAdapter(mProductList, getApplicationContext(), client);
+                            mRecyclerView.setAdapter(mAdapter);
+                            break;
+                        default:
+                            Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<EventList> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<EventList> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
-
 }

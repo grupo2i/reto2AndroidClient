@@ -40,26 +40,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.056" />
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="371dp"
-        android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="17dp"
-        android:hint="Select Date"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSearchDate" />
-
-    <TextView
-        android:id="@+id/txtSearchDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="298dp"
-        android:text="Search by date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtClub" />
     <LinearLayout
         android:id="@+id/linearLayoutNavigationBar"
         android:layout_width="416dp"
@@ -127,11 +107,11 @@
         android:layout_width="371dp"
         android:layout_height="40dp"
         android:layout_marginTop="1dp"
-        android:layout_marginEnd="19dp"
         android:ems="10"
         android:hint="Type club"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtSearchLocation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

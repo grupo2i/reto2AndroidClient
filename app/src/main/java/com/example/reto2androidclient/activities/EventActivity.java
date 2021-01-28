@@ -56,9 +56,6 @@ public class EventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-        //TODO: -Show rating average
-        //      -Save new rating
-
         //Get event and client
         client = (Client)getIntent().getExtras().getSerializable("CLIENT");
         event = (Event)getIntent().getExtras().getSerializable("EVENT");
@@ -120,7 +117,7 @@ public class EventActivity extends AppCompatActivity {
                         }
                         break;
                     default:
-                        Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
                 }
             }
             @Override
@@ -157,7 +154,7 @@ public class EventActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), R.string.saved_rating, Toast.LENGTH_SHORT).show();
                                 break;
                             default:
-                                Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
                         }
                     }
                     @Override
@@ -177,7 +174,7 @@ public class EventActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), R.string.saved_rating, Toast.LENGTH_SHORT).show();
                                 break;
                             default:
-                                Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
                         }
                     }
                     @Override
@@ -209,7 +206,7 @@ public class EventActivity extends AppCompatActivity {
                                 addToWishlist = false;
                                 break;
                             default:
-                                Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
                         }
                     }
                     @Override
@@ -235,7 +232,7 @@ public class EventActivity extends AppCompatActivity {
                                 addToWishlist = true;
                                 break;
                             default:
-                                Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
                         }
                     }
                     @Override
