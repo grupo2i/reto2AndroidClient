@@ -123,7 +123,9 @@ public class ClientProfileActivity extends AppCompatActivity {
         buttonChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                throw new UnsupportedOperationException();
+                Intent intent = new Intent(ClientProfileActivity.this, ChangePasswordActivity.class);
+                intent.putExtra("CLIENT", client);
+                startActivity(intent);
             }
         });
 
@@ -144,7 +146,9 @@ public class ClientProfileActivity extends AppCompatActivity {
         imageButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                throw new UnsupportedOperationException();
+                Intent intent = new Intent(ClientProfileActivity.this, SearchActivity.class);
+                intent.putExtra("CLIENT", client);
+                startActivity(intent);
             }
         });
 

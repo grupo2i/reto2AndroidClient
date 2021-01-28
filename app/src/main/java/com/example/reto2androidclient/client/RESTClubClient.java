@@ -6,7 +6,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class RESTClubClient {
-    private static String BASE_URL = "http://192.168.21.158:8080/reto2Server/webresources/entity.club/";
+    private static String BASE_URL = "http://192.168.20.116:11238/reto2Server/webresources/entity.club/";
 
     public static RESTClubInterface getClubs() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

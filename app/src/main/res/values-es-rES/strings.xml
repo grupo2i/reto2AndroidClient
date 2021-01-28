@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pointer</string>
+
+    <!-- Common Strings -->
+    <string name="unexpectedError">Ocurrio un error inesperado .</string>
+    <string name="loginLengthError">ERROR: El usuario no puede superar 255 carateres y ha de ser mas de 1</string>
+    <string name="loginAlreadyRegisteredError">ERROR: El usuario ya existe.</string>
+    <string name="emailLengthError">ERROR: El email no puede superar 255 carateres y ha de ser mas de 1</string>
+    <string name="emailPatternError">ERROR: El email ha de seguir este patron: ejemplo@ejemplo.ejemplo</string>
+    <string name="emailAlreadyRegisteredError">ERROR: El email ya existe.</string>
+    <string name="passwordLengthError">ERROR: El email no puede superar 255 carateres y ha de ser mas de 5.</string>
+    <string name="passwordsDoNotMatchError">ERROR: Las contraseñas han de coincidir.</string>
+    <string name="biographyLengthError">ERROR: La biografia no puede ser mayor de 255 caracteres.</string>
+    <string name="fullNameLengthError">ERROR: El nombre no puede superar 255 carateres y ha de ser mas de 1</string>
+    <string name="back">Back</string>
+
+    <!-- Profile images -->
+    <string name="badass_coffee_avatar">Cafe malote</string>
+    <string name="crazy_ass_avocado_avatar">Aguacate loco</string>
+    <string name="crazy_ass_sheep_avatar">Obeja loca</string>
+    <string name="wasted_zombie_avatar">Zombie reventado</string>
+    <string name="punky_avatar">Punkazo</string>
+    <string name="normal_guy_avatar">Un tio normal</string>
+    <string name="puritan_nun_avatar">Monja puritana</string>
+    <string name="donald_trump_avatar">Naranja con tupé</string>
+    <string name="marilyn_monroe_avatar">Marilyn Monroe</string>
+    <string name="heisenberg_avatar">Heisenberg</string>
+    <string name="high_af_harley_quinn_avatar">Alta como Harley Queen</string>
+
+    <!-- LogIn -->
+    <string name="logIn_credentialsError">Usuario o contraseña incorrectos.</string>
+    <string name="logIn_emptyFieldsError">Los dos campos han de estar rellenos para entrar a la aplicacion</string>
+    <string name="logIn_forgotPassword">Olvidé mi contraseña</string>
+    <string name="logIn_wrongUserPrivilege">Solo clientes admitidos en la aplicacion.</string>
+
+    <!-- SignUp -->
+    <string name="signUp_successfulSignUp">Registro exitoso</string>
+
+    <!-- Client Profile Activity -->
+    <string name="clientProfile_successfulProfileUpdate">El perfil fue modificado satisfactoriamente</string>
+    <string name="clientProfile_editProfileButton">EDITAR PERFIL</string>
+    <string name="clientProfile_saveChangesButton">GUARDAR CAMBIOS</string>
+    <string name="clientProfile_profileImage">Imagen de perfil:</string>
+    <string name="clientProfile_fullNameHint">Nombre completo:</string>
+    <string name="clientProfile_biographyHint">Biografia</string>
+    <string name="clientProfile_deleteAccount">BORRAR CUENTA</string>
+    <string name="clientProfile_successfulDelete">Cuenta borrada satisfactoriamente</string>
+
+    <!-- Forgot Password Activity -->
+    <string name="forgotPassword_emailHint">Direccion de correo</string>
+    <string name="forgotPassword_confirmEmailHint">Confirmar direccion de correo</string>
+    <string name="forgotPassword_resetPassword">REESTABLECER CONTRASEÑA</string>
+    <string name="forgotPassword_emailNotRegistered">No pudimos encontrar una cuenta asociada a ese mail</string>
+    <string name="forgotPassword_passwordReset">Un correo fue enviado con la nueva contraseña.</string>
+    <string name="forgotPassword_EmailsDoNotMatch">Las direcciones de correo no coinciden.</string>
+
+    <!-- Event Card Layout -->
+    <string name="date">Fcha</string>
+    <string name="event_name">Nombre del evento</string>
+    <string name="event_organizer">Organizador del evento</string>
+    <string name="price">Precio</string>
+    <string name="description">Descripcion</string>
+    <string name="location">Localizacion</string>
+    <string name="club">Club</string>
+    <string name="artists">Artistas</string>
+    <string name="ratings">Valoraciones</string>
+    <string name="rating_comment">Comentario</string>
+    <string name="save_rating">Guardar valoracion</string>
+    <string name="saved_rating">Valoracion guardada con éxito</string>
+    <string name="add_wishlist">Añadir a lista de deseos</string>
+    <string name="remove_wishlist">Eliminar de lista de deseos</string>
+
+    <!-- Change Password Activity -->
+    <string name="changePassword_title">CAMBIAR CONTRASEÑA</string>
+    <string name="changePassword_writeOldPassword">Escribe contraseña antigua</string>
+    <string name="changePassword_writeNewPassword">Escribe contraseña nueva</string>
+    <string name="changePassword_rewriteNewPassword">Re-escribe contraseña nueva</string>
+    <string name="changePassword_passwordChanged">La contraseña fue modificada satisfactoriamente.</string>
+    <string name="changePassword_notPasswordChanged">La contraseña no fue cambiada.</string>
+    <string name="changePassword_passwordDoNotMatch">Las contraseñas no coinciden.</string>
+
+    <!-- Search Activity -->
+    <string name="searchByArtist">Buscar por artista: </string>
+    <string name="typeArtist">Escribe el artista</string>
+    <string name="searchByClub">Buscar por club: </string>
+    <string name="typeClub">Escribe el club: </string>
+    <string name="searchByDate">Buscar por fecha: </string>
+    <string name="selectDate">Selecciona fecha</string>
+    <string name="search">Buscar</string>
+</resources>
