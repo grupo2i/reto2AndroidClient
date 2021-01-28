@@ -78,7 +78,7 @@ public class SearchActivity extends AppCompatActivity {
         client = (Client) getIntent().getExtras().getSerializable("CLIENT");
 
         //GETTING ALL EVENTS..
-        RESTEventInterface restEventInterface = RESTEventClient.getEvents();
+        RESTEventInterface restEventInterface = RESTEventClient.getClient();
         Call<EventList> callEvents = restEventInterface.getAllEvents();
         callEvents.enqueue(new Callback<EventList>() {
             @Override
