@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Reto2AndroidClient</string>
+    <string name="app_name">Pointer</string>
 
     <!-- Common Strings -->
     <string name="unexpectedError">An unexpected error occurred, please try later.</string>
@@ -78,4 +78,13 @@
     <string name="changePassword_passwordChanged">The password was changed successfully.</string>
     <string name="changePassword_notPasswordChanged">The password was not changed.</string>
     <string name="changePassword_passwordDoNotMatch">The passwords do not match.</string>
+
+    <!-- Search Activity -->
+    <string name="searchByArtist">Search by artist: </string>
+    <string name="typeArtist">Type artist name</string>
+    <string name="searchByClub">Search by club: </string>
+    <string name="typeClub">Type club: </string>
+    <string name="searchByDate">Search by date: </string>
+    <string name="selectDate">Select date</string>
+    <string name="search">Search</string>
 </resources>

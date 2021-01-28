@@ -14,8 +14,6 @@ import com.example.reto2androidclient.client.RESTClientClient;
 import com.example.reto2androidclient.client.RESTClientInterface;
 import com.example.reto2androidclient.exceptions.UnexpectedErrorException;
 import com.example.reto2androidclient.model.Client;
-import com.example.reto2androidclient.model.User;
-import com.example.reto2androidclient.security.PublicCrypt;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -32,11 +30,13 @@ import static com.example.reto2androidclient.security.PublicCrypt.*;
 public class ChangePasswordActivity extends AppCompatActivity {
     private EditText editTextOldPassword, editTextNewPassword, editTextRewritePassword;
     private Button buttonChangePassword, buttonBack;
-    private User user;
+    private Client client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        client = (Client) getIntent().getExtras().getSerializable("CLIENT");
 
         editTextOldPassword = findViewById(R.id.editTextOldPassword);
         editTextNewPassword = findViewById(R.id.editTextNewPassword);
@@ -69,15 +69,16 @@ public class ChangePasswordActivity extends AppCompatActivity {
         String pass = editTextNewPassword.getText().toString();
         String passwordConfirmation = editTextRewritePassword.getText().toString();
         if(pass.equalsIgnoreCase(passwordConfirmation)) {
-            String encodedPassword;
+            String encodedPassword = null;
             try {
                 encodedPassword = encode(ChangePasswordActivity.this, passwordConfirmation);
             } catch (UnexpectedErrorException e) {
                 e.printStackTrace();
             }
+            client.setPassword(encodedPassword);
             RESTClientInterface rest = RESTClientClient.getClient();
             Call<ResponseBody> call;
-            call = rest.edit((Client) user);
+            call = rest.edit((Client) client);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -98,6 +99,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     //The request did not get to the server.
                     Toast.makeText(getApplicationContext(), getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
+                    t.printStackTrace();
                 }
             });
         } else {
