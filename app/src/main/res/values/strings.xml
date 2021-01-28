@@ -54,4 +54,19 @@
     <string name="forgotPassword_passwordReset">An email with the new password was sent.</string>
     <string name="forgotPassword_EmailsDoNotMatch">The email addresses do not match.</string>
 
+    <!-- Event Card Layout -->
+    <string name="date">Date</string>
+    <string name="event_name">Event name</string>
+    <string name="event_organizer">Event organizer</string>
+    <string name="price">Price</string>
+    <string name="description">Description</string>
+    <string name="location">Location</string>
+    <string name="club">Club</string>
+    <string name="artists">Artists</string>
+    <string name="ratings">Ratings</string>
+    <string name="rating_comment">Rating comment</string>
+    <string name="save_rating">Save rating</string>
+    <string name="saved_rating">Rating saved successfully</string>
+    <string name="add_wishlist">Add to wishlist</string>
+    <string name="remove_wishlist">Remove from wishlist</string>
 </resources>

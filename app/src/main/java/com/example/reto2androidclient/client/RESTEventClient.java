@@ -5,10 +5,15 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
+/**
+ * Factory for {@link RESTEventInterface} interface.
+ *
+ * @author Martin Angulo
+ */
 public class RESTEventClient {
-    private static String BASE_URL = "http://192.168.21.158:8080/reto2Server/webresources/entity.event/";
+    private static String BASE_URL = "http://192.168.21.122:8080/reto2Server/webresources/entity.event/";
 
-    public static RESTEventInterface getEvents() {
+    public static RESTEventInterface getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(interceptor);
@@ -23,4 +28,3 @@ public class RESTEventClient {
         return restEventInterface;
     }
 }
-

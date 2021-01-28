@@ -1,10 +1,10 @@
 package com.example.reto2androidclient.model;
 
-
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.util.List;
+
 @Root(name="events")
 public class EventList {
     @ElementList(entry="event", inline=true)
