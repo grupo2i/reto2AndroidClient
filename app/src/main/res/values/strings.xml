@@ -69,4 +69,13 @@
     <string name="saved_rating">Rating saved successfully</string>
     <string name="add_wishlist">Add to wishlist</string>
     <string name="remove_wishlist">Remove from wishlist</string>
+
+    <!-- Change Password Activity -->
+    <string name="changePassword_title">CHANGE PASSWORD</string>
+    <string name="changePassword_writeOldPassword">Write your old password</string>
+    <string name="changePassword_writeNewPassword">Write your new password</string>
+    <string name="changePassword_rewriteNewPassword">Rewrite your new password</string>
+    <string name="changePassword_passwordChanged">The password was changed successfully.</string>
+    <string name="changePassword_notPasswordChanged">The password was not changed.</string>
+    <string name="changePassword_passwordDoNotMatch">The passwords do not match.</string>
 </resources>
