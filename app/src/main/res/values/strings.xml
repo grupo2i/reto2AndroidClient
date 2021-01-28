@@ -68,4 +68,5 @@
     <string name="save_rating">Save rating</string>
     <string name="saved_rating">Rating saved successfully</string>
     <string name="add_wishlist">Add to wishlist</string>
+    <string name="remove_wishlist">Remove from wishlist</string>
 </resources>
