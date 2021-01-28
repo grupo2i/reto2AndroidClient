@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private EventCardAdapter mAdapter;
     private List<Event> mProductList;
+    private Event events;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         client = (Client) getIntent().getExtras().getSerializable("CLIENT");
+        events = (Event) getIntent().getExtras().getSerializable("Filtered");
 
         imageButtonHome = findViewById(R.id.imageButtonHomeClientProfile);
         imageButtonHome.setEnabled(false);
@@ -53,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             Intent intentToSearch = new Intent(HomeActivity.this, SearchActivity.class);
+            intentToSearch.putExtra("CLIENT", client);
             startActivity(intentToSearch);
             }
         });

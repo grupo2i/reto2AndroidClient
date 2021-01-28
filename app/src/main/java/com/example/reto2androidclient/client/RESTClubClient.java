@@ -5,15 +5,10 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-/**
- * Factory for {@link RESTEventInterface} interface.
- *
- * @author Martin Angulo
- */
-public class RESTEventClient {
-    private static String BASE_URL = "http://192.168.21.122:8080/reto2Server/webresources/entity.event/";
+public class RESTClubClient {
+    private static String BASE_URL = "http://192.168.21.158:8080/reto2Server/webresources/entity.club/";
 
-    public static RESTEventInterface getClient() {
+    public static RESTClubInterface getClubs() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder().addInterceptor(interceptor);
@@ -23,8 +18,8 @@ public class RESTEventClient {
                 .addConverterFactory(SimpleXmlConverterFactory.create());
 
         Retrofit retrofit = builder.client(httpClient.build()).build();
-        RESTEventInterface restEventInterface = retrofit.create(RESTEventInterface.class);
+        RESTClubInterface restClubInterface = retrofit.create(RESTClubInterface.class);
 
-        return restEventInterface;
+        return restClubInterface;
     }
 }

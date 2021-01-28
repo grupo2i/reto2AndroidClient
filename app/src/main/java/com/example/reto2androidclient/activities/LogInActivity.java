@@ -83,11 +83,13 @@ public class LogInActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             ex.getMessage(), Toast.LENGTH_LONG).show();
                     playWrongLogInAnimation();
+                    ex.printStackTrace();
                 } catch (Exception ex) {
                     //Showing unexpected error message.
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.unexpectedError), Toast.LENGTH_LONG).show();
                     playWrongLogInAnimation();
+                    ex.printStackTrace();
                 }
             }
         });

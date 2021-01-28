@@ -19,7 +19,7 @@ public class SocialNetwork implements Serializable {
     private Integer id;
     @Element(name="socialNetwork")
     private URL socialNetwork;
-    @Element(name="artist")
+    @Element(name="artist", required = false)
     private Artist artist;
 
     public Integer getId() {
