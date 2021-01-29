@@ -31,11 +31,14 @@ import com.example.reto2androidclient.model.Club;
 import com.example.reto2androidclient.model.ClubList;
 import com.example.reto2androidclient.model.Event;
 import com.example.reto2androidclient.model.EventList;
+
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,7 +48,6 @@ public class SearchActivity extends AppCompatActivity {
 
     EditText searchDate;
     TextView mDisplayDate;
-    private SQLiteDatabase sqLiteDatabase = null;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private ImageButton imageButtonHome, imageButtonSearch, imageButtonWishlist, imageButtonProfile;
     private Client client;
@@ -64,15 +66,13 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         setTitle("Filter events");
         search = findViewById(R.id.search);
-        mDisplayDate = (TextView) findViewById(R.id.tvDate);
+        //mDisplayDate = (TextView) findViewById(R.id.tvDate);
         txtArtistName = (EditText) findViewById(R.id.txtArtistName);
         txtClub = (EditText) findViewById(R.id.txtClub);
-        tvDate = (TextView) findViewById(R.id.tvDate);
+        //tvDate = (TextView) findViewById(R.id.tvDate);
         imageButtonHome = findViewById(R.id.imageButtonHomeClientProfile);
         imageButtonHome.setEnabled(false);
         imageButtonSearch = findViewById(R.id.imageButtonSearchHome);
-        sqLiteDatabase = SQLiteDatabase.openDatabase(String.valueOf(getDatabasePath(
-                "sqLiteDatabase")), null, SQLiteDatabase.OPEN_READWRITE);
 
         client = (Client) getIntent().getExtras().getSerializable("CLIENT");
 
@@ -86,6 +86,7 @@ public class SearchActivity extends AppCompatActivity {
                     case 200:
                        EventList eventList = response.body();
                        events=eventList.getEvents();
+                       break;
                     default:
                         Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
                 }
@@ -103,10 +104,10 @@ public class SearchActivity extends AppCompatActivity {
         callArtists.enqueue(new Callback<ArtistList>() {
             @Override
             public void onResponse(Call<ArtistList> call, Response<ArtistList> response) {
-                boolean esta=false;
                 switch (response.code()) {
                     case 200:
                         artists = response.body();
+                        break;
                     default:
                         Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
                 }
@@ -127,6 +128,7 @@ public class SearchActivity extends AppCompatActivity {
                 switch (response.code()) {
                     case 200:
                         clubs = response.body();
+                        break;
                     default:
                         Toast.makeText(getApplicationContext(), String.valueOf(response.code()), Toast.LENGTH_LONG).show();
                 }
@@ -167,7 +169,7 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intentToHome);
             }
         });
-        mDisplayDate.setOnClickListener(new View.OnClickListener() {
+        /*mDisplayDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar cal = Calendar.getInstance();
@@ -195,12 +197,36 @@ public class SearchActivity extends AppCompatActivity {
                 String date = year + "-" + month + "-" + day;
                 mDisplayDate.setText(date);
             }
-        };
+        };*/
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                List<Event> searchEvents = new ArrayList<>();
+                if(txtArtistName.getText().length() != 0) {
+                    for(Event e : events) {
+                        Set<Artist> eventArtists = e.getArtists();
+                        for(Artist a : eventArtists) {
+                            if(a.getFullName().contains(txtArtistName.getText())) {
+                                searchEvents.add(e);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if(txtClub.getText().length() != 0) {
+                    for(Event e : events) {
+                        if(e.getClub().getFullName().contains(txtArtistName.getText())) {
+                            searchEvents.add(e);
+                            break;
+                        }
+                    }
+                }
+
+                events = searchEvents;
                 //ARTIST
+                /*
                 boolean esta=false;
                 Artist artist = new Artist();
                 if(txtArtistName.getText().length()>0){
@@ -218,7 +244,8 @@ public class SearchActivity extends AppCompatActivity {
                             }
                         }
                     }
-                }esta=false;
+                }
+                esta=false;
                 //CLUB
                 Club club  = new Club();
                 if(txtClub.getText().toString().length()>0){
@@ -262,9 +289,10 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 if(events.size()==0){
                     Toast.makeText(getApplicationContext(), R.string.unexpectedError, Toast.LENGTH_LONG).show();
-                }
+                }*/
                 Intent intentToHome = new Intent(SearchActivity.this, HomeActivity.class);
-                intentToHome.putExtra("Filtered", (Parcelable) events);
+                intentToHome.putExtra("CLIENT", client);
+                intentToHome.putExtra("Filtered", (Serializable)events);
                 startActivity(intentToHome);
             }
         });
