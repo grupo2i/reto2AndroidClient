@@ -11,7 +11,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
  * @author Martin Angulo
  */
 public class RESTRatingClient {
-    private static String BASE_URL = "http://192.168.21.122:8080/reto2Server/webresources/entity.rating/";
+    private static String BASE_URL = "http://192.168.20.116:11238/reto2Server/webresources/entity.rating/";
 
     public static RESTRatingInterface getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

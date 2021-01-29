@@ -35,7 +35,6 @@ import com.example.reto2androidclient.model.EventList;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -145,9 +144,9 @@ public class SearchActivity extends AppCompatActivity {
         imageButtonWishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentToHome = new Intent(SearchActivity.this, WishlistActivity.class);
-                intentToHome.putExtra("CLIENT", client);
-                startActivity(intentToHome);
+                Intent intentToClientProfile = new Intent(SearchActivity.this, WishlistActivity.class);
+                intentToClientProfile.putExtra("CLIENT", client);
+                startActivity(intentToClientProfile);
             }
         });
 
@@ -268,10 +267,10 @@ public class SearchActivity extends AppCompatActivity {
                 //DATE
                 try{
                 Date dateUser = null;
-                    Date dateEvents = null;
+                Date dateEvents = null;
                 if(tvDate.getText().toString().length()>0){
                     SimpleDateFormat formater=new SimpleDateFormat("yyyy/MM/dd");
-                        dateUser = formater.parse(tvDate.getText().toString());
+                    dateUser = formater.parse(tvDate.getText().toString());
                     if(dateFound){
                         for (Event e : events) {
                             dateEvents=formater.parse(e.getDate());

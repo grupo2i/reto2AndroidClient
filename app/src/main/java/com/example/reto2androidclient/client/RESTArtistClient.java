@@ -8,6 +8,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public class RESTArtistClient {
     private static String BASE_URL = "http://192.168.21.122:8080/reto2Server/webresources/entity.artist/";
 
+
     public static RESTArtistInterface getArtist() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
